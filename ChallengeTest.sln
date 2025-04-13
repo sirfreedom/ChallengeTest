@@ -1,0 +1,133 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleChallenge", "ConsoleChallenge\ConsoleChallenge.csproj", "{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormDisegnPattern", "WinFormDisegnPattern\WinFormDisegnPattern.csproj", "{17CF990A-1695-47E4-9002-24C65C40A0A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F5D6F0A-5A60-4C21-A52B-D8328B129B83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilCoding", "UtilCoding\UtilCoding.csproj", "{E00F3B80-03C5-4236-A3C3-79A93635A9C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiUploadFileReact", "ApiFileUpload\ApiUploadFileReact.csproj", "{7F04DDFA-9601-49B2-9FF7-A6E567B88653}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageHelper", "ImageHelper\ImageHelper.csproj", "{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatAppXp", "WhatappCopy\WhatAppXp.csproj", "{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Debug|x86.Build.0 = Debug|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Release|x86.ActiveCfg = Release|Any CPU
+		{68E9FF1B-8B78-4CEF-93B6-5C858F0E0096}.Release|x86.Build.0 = Release|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Debug|x86.Build.0 = Debug|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Release|x86.ActiveCfg = Release|Any CPU
+		{17CF990A-1695-47E4-9002-24C65C40A0A5}.Release|x86.Build.0 = Release|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Debug|x86.Build.0 = Debug|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Release|x86.ActiveCfg = Release|Any CPU
+		{E00F3B80-03C5-4236-A3C3-79A93635A9C2}.Release|x86.Build.0 = Release|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Debug|x86.Build.0 = Debug|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Release|x86.ActiveCfg = Release|Any CPU
+		{7F04DDFA-9601-49B2-9FF7-A6E567B88653}.Release|x86.Build.0 = Release|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Debug|x86.Build.0 = Debug|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Release|x86.ActiveCfg = Release|Any CPU
+		{8A302B77-854F-4A8B-A1D3-1E11B4AF0E02}.Release|x86.Build.0 = Release|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{BAFBAB55-1118-4596-85E4-ADDDBF1EA8AA}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EF2EBF05-30A2-4E62-9272-DED0BC95DB0A}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://sirfreedom.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ConsoleChallenge\\ConsoleChallenge.csproj
+		SccProjectName1 = ConsoleChallenge
+		SccLocalPath1 = ConsoleChallenge
+		SccProjectUniqueName2 = WinFormDisegnPattern\\WinFormDisegnPattern.csproj
+		SccProjectName2 = WinFormDisegnPattern
+		SccLocalPath2 = WinFormDisegnPattern
+		SccProjectUniqueName3 = UtilCoding\\UtilCoding.csproj
+		SccProjectName3 = UtilCoding
+		SccLocalPath3 = UtilCoding
+		SccProjectUniqueName4 = ApiFileUpload\\ApiUploadFileReact.csproj
+		SccProjectName4 = ApiFileUpload
+		SccLocalPath4 = ApiFileUpload
+		SccProjectUniqueName5 = ImageHelper\\ImageHelper.csproj
+		SccProjectName5 = ImageHelper
+		SccLocalPath5 = ImageHelper
+		SccProjectUniqueName6 = WhatappCopy\\WhatAppXp.csproj
+		SccProjectName6 = WhatappCopy
+		SccLocalPath6 = WhatappCopy
+	EndGlobalSection
+EndGlobal

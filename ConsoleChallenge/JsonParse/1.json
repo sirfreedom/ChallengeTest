@@ -1,0 +1,64 @@
+{
+  "common": [
+    {
+      "ptf_Terminal": [
+        {
+          "skins": []
+        }, 
+        {
+          "help": [
+            {
+              "en_GB": [
+                {
+                  "md5": "fd632797a9adb10d068868f86a2b6951", 
+                  "name": "keno.html", 
+                  "required": true
+                }, 
+                {
+                  "md5": "4262186789c88657ddeaef6acbaaa45f", 
+                  "name": "roulette.html", 
+                  "required": true
+                }, 
+                {
+                  "md5": "2e480334d198ce3be300cbaa796d8dcf", 
+                  "name": "index.html", 
+                  "required": true
+                }
+              ]
+            }, 
+            {
+              "md5": "8f6ef3f09333fe11d39cdbc2da96ce6c", 
+              "name": "keno_paytables.json", 
+              "required": true
+            }
+          ]
+        }, 
+        {
+          "languages": []
+        }
+      ]
+    }
+  ], 
+  "fg": [
+    {
+      "skins": []
+    }, 
+    {
+      "common": [
+        {
+          "src": [
+            {
+              "fizzbuzz": [
+                {
+                  "md5": "7ecf215cac83f7a60cc8504a781b0ad2", 
+                  "name": "problema.md", 
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
