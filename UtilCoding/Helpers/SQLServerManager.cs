@@ -893,7 +893,6 @@ namespace UtilCoding
                 StringBuilder sbUpdate = new StringBuilder();
                 StringBuilder sbFindWhere = new StringBuilder();
                 StringBuilder sbInsert = new StringBuilder();
-                bool isWriteColumn = false;
                 bool isNeedNewLine = false;
                 int iColumnWhereInsertedFind = 1;
                 int iColumnWhereTotalFind = 0;
@@ -965,9 +964,7 @@ namespace UtilCoding
                             case "nvarchar":
                             case "ntext":
                             case "varchar":
-                            case "text":
                             case "char":
-                                isWriteColumn = true;
                                 iColumnWhereInsertedFind++;
 
                                 sbFindWhere.Append("( ");
@@ -1006,12 +1003,48 @@ namespace UtilCoding
                                 sbParamFindWithoutId.Append(")");
                                 sbParamFindWithoutId.AppendLine();
 
+                                sbParam.Append("(");
+                                sbParam.Append(lColumn[i].ColumnLen);
+                                sbParam.Append(")");
+                                
+                                break;
+                            case "text":
+                                iColumnWhereInsertedFind++;
+
+                                sbFindWhere.Append("( ");
+                                sbFindWhere.Append(sCapitalLetter);
+                                sbFindWhere.Append(".");
+                                sbFindWhere.Append("[");
+                                sbFindWhere.Append(lColumn[i].ColumnName);
+                                sbFindWhere.Append("] ");
+                                sbFindWhere.Append("like '%' + ");
+                                sbFindWhere.Append("@");
+                                sbFindWhere.Append(lColumn[i].ColumnName);
+                                sbFindWhere.Append(" + '%' ");
+                                sbFindWhere.Append(" or ");
+                                sbFindWhere.Append("@");
+                                sbFindWhere.Append(lColumn[i].ColumnName);
+                                sbFindWhere.Append(" = ");
+                                sbFindWhere.Append(" '' ");
+                                sbFindWhere.Append(" ) ");
+
+                                sbParamFindWithoutId.Append("@");
+                                sbParamFindWithoutId.Append(lColumn[i].ColumnName);
+                                sbParamFindWithoutId.Append(" ");
+                                sbParamFindWithoutId.Append(lColumn[i].ColumType);
+
+                                sbParamInsertWithoutId.Append("@");
+                                sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
+                                sbParamInsertWithoutId.Append(" ");
+                                sbParamInsertWithoutId.Append(lColumn[i].ColumType);
+
+                                sbParamFindWithoutId.AppendLine();
+
                                 break;
                             case "bigint":  
                             case "smallint":
                             case "int":
                             case "tinyint":
-                                isWriteColumn = true;
                                 sbParamInsertWithoutId.Append("@");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
                                 sbParamInsertWithoutId.Append(" ");
@@ -1028,7 +1061,6 @@ namespace UtilCoding
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumType);
                                 break;
                             case "bit":
-                                isWriteColumn = true;
                                 iColumnWhereInsertedFind++;
                                 sbParamInsertWithoutId.Append("@");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
@@ -1065,7 +1097,6 @@ namespace UtilCoding
                             case "smalldatetime":
                             case "datetime":
                             case "time":
-                                isWriteColumn = true;
                                 sbParamInsertWithoutId.Append("@");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
                                 sbParamInsertWithoutId.Append(" ");
@@ -1077,7 +1108,7 @@ namespace UtilCoding
                                 break;
                         }
 
-                        if (i < lColumn.Count -1 && isWriteColumn )
+                        if (i < lColumn.Count -1 )
                         {
                             sbColums.Append(",");
                             sbColumsWithoutId.Append(",");
@@ -1085,7 +1116,6 @@ namespace UtilCoding
                             sbUpdate.Append(",");
                             sbInsert.Append(",");
                             sbParamInsertWithoutId.Append(",");
-                            isWriteColumn = false;
                             isNeedNewLine = true;
                         }
 
@@ -1123,14 +1153,12 @@ namespace UtilCoding
                     sb.Append("CREATE PROCEDURE [dbo].[");
                     sb.Append(sTable);
                     sb.Append("_List]");
-                    sb.AppendLine();
-
                     sb.AppendLine(sbHeader.ToString());
 
                     sb.Append("Select");
                     sb.AppendLine();
                     sb.Append(sbColums.ToString());
-                    sb.Append("FROM");
+                    sb.Append(" FROM ");
                     sb.Append(sTable);
                     sb.Append(" ");
                     sb.Append(sCapitalLetter);
