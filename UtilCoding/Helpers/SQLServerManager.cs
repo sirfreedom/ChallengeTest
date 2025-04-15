@@ -176,24 +176,30 @@ namespace UtilCoding
                 sbConsultas.AppendLine();
 
                 //Consulta de Columnas
-                sbConsultas.AppendLine("select");
+                sbConsultas.AppendLine("select ");
                 sbConsultas.AppendLine("so.Id TableId,");
-                sbConsultas.AppendLine("sc.[name] ColumnName, ");
-                sbConsultas.AppendLine("st.[name] ColumType, ");
-                sbConsultas.AppendLine("sc.[length] ColumnLen,");
-                sbConsultas.AppendLine("isnull(case when sc.scale = 0 then sc.[name] else ic.[name] end,'') as NameColumnPK,");
-                sbConsultas.AppendLine("sc.isnullable as AllowNull");
-                sbConsultas.AppendLine("from [syscolumns] sc");
+                sbConsultas.AppendLine("sc.[name] ColumnName,");
+                sbConsultas.AppendLine("st.[name] ColumType,  ");
+                sbConsultas.AppendLine("sc.[length] ColumnLen, ");
+                sbConsultas.AppendLine("(SELECT c.name AS column_name FROM sys.columns c ");
+                sbConsultas.AppendLine("INNER JOIN sys.index_columns ic ON c.object_id = ic.object_id");
+                sbConsultas.AppendLine("AND c.column_id = ic.column_id");
+                sbConsultas.AppendLine("INNER JOIN sys.indexes i ON ic.object_id = i.object_id");
+                sbConsultas.AppendLine("AND ic.index_id = i.index_id ");
+                sbConsultas.AppendLine("INNER JOIN sys.tables t ON i.object_id = t.object_id");
+                sbConsultas.AppendLine("WHERE t.name = so.[name] AND i.is_primary_key = 1) as NameColumnPK,");
+                sbConsultas.AppendLine("sc.isnullable as AllowNull ");
+                sbConsultas.AppendLine("from [syscolumns] sc ");
                 sbConsultas.AppendLine("inner join [systypes] st");
-                sbConsultas.AppendLine("on st.xtype = sc.xtype");
+                sbConsultas.AppendLine("on st.xtype = sc.xtype ");
                 sbConsultas.AppendLine("inner join [SYSOBJECTS] so");
-                sbConsultas.AppendLine("on sc.id = so.id");
+                sbConsultas.AppendLine("on sc.id = so.id ");
                 sbConsultas.AppendLine("left join sys.[identity_columns] ic");
-                sbConsultas.AppendLine("on so.id = ic.[object_id]");
-                sbConsultas.AppendLine("WHERE so.[TYPE] = 'U'");
+                sbConsultas.AppendLine("on so.id = ic.[object_id] ");
+                sbConsultas.AppendLine("WHERE so.[TYPE] = 'U' ");
                 sbConsultas.AppendLine("and so.[name] != 'dtproperties'");
-                sbConsultas.AppendLine("and st.[name] != 'sysname'");
-                sbConsultas.AppendLine("and so.[name] in (");
+                sbConsultas.AppendLine("and st.[name] != 'sysname' ");
+                sbConsultas.AppendLine("and so.[name] in ( ");
                 sbConsultas.AppendLine(sbTablasFilter.ToString());
                 sbConsultas.AppendLine(")");
                 sbConsultas.AppendLine("order by TableId");
@@ -842,9 +848,7 @@ namespace UtilCoding
             StringBuilder sbFooter = new StringBuilder();
             PackTableInfo oPack = new PackTableInfo();
             StringBuilder sbFile = new StringBuilder();
-            string sColumPK = string.Empty;
-            string sTypeColumPk = string.Empty;
-            int TableId = 0;
+
             sbHeader.AppendLine();
             sbHeader.AppendLine("AS");
             sbHeader.AppendLine("BEGIN");
@@ -879,6 +883,9 @@ namespace UtilCoding
 
             foreach (string sTable in Tables) 
             {
+                int TableId = 0;
+                string sColumPK = string.Empty;
+                string sTypeColumPk = string.Empty;
                 TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
                 TableId = oTableRelation.TableId;
                 List<TableConstrainRelation> lTableConstrain = oPack.TableConstrainRelations.Where(x => x.TableId == TableId).ToList();
@@ -896,7 +903,7 @@ namespace UtilCoding
                 bool isNeedNewLine = false;
                 int iColumnWhereInsertedFind = 1;
                 int iColumnWhereTotalFind = 0;
-                
+
                 string sCapitalLetter = string.Empty;
                 lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
                 sCapitalLetter = sTable.Substring(0, 1).ToLower();
@@ -1317,6 +1324,7 @@ namespace UtilCoding
                     sb.AppendLine();
                 }
             }
+
             sbFile.Append(PathFile);
             sbFile.Append("sp_");
             sbFile.Append(DateTime.Now.Ticks.ToString());
