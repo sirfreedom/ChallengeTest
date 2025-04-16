@@ -1214,7 +1214,7 @@ namespace UtilCoding
                     sb.AppendLine();
                 }
 
-                if (Find) 
+                if (Find && iColumnWhereTotalFind > 0) 
                 {
                     sb.Append(sbPreHeader.ToString());
                     sb.Append("CREATE PROCEDURE [dbo].[");
