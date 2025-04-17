@@ -13,6 +13,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls.Primitives;
+using System.Windows.Forms.VisualStyles;
 
 
 namespace UtilCoding
@@ -1362,6 +1364,7 @@ namespace UtilCoding
                 {
                     sb.Append("namespace ");
                     sb.Append(NameSpace);
+                    sb.Append(".Entity");
                     sb.AppendLine();
                     sb.Append("{");
                     sb.AppendLine();
@@ -1468,6 +1471,357 @@ namespace UtilCoding
 
             }
         }
+
+        public void CreateDataLayerClass(List<string> Tables, string PathFile, bool IncludePK, string NameSpace = "", string BaseClass = "", bool List = false, bool Get = false, bool Find = false, bool Insert = false, bool Update = false, bool Delete = false) 
+        {
+            PackTableInfo oPack = new PackTableInfo();
+            StringBuilder sbNewPath = new StringBuilder();
+            int TableId = 0;
+
+            sbNewPath.Append(PathFile);
+            sbNewPath.Append("DataLayerClass_");
+            sbNewPath.Append(DateTime.Now.Ticks.ToString());
+            sbNewPath.Append(@"\");
+
+            Directory.CreateDirectory(sbNewPath.ToString());
+
+            oPack = GetTablesInfo(Tables);
+
+            foreach (string sTable in Tables)
+            {
+                StringBuilder sb = new StringBuilder();
+                StringBuilder sbTryCatch = new StringBuilder();
+                StringBuilder sbFile = new StringBuilder();
+                TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
+                TableId = oTableRelation.TableId;
+                List<TableColumn> lColumn = new List<TableColumn>();
+                lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
+
+                sbTryCatch.Append("catch (Exception) ");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append("{");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append("throw;");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append("}");
+                sbTryCatch.AppendLine();
+
+                sb.Append("using System.Collections.Generic;");
+                sb.AppendLine();
+                sb.Append("using ");
+                sb.Append(NameSpace);
+                sb.Append(".Entity;");
+                sb.AppendLine();
+
+                if (NameSpace.Length > 3)
+                {
+                    sb.Append("namespace ");
+                    sb.Append(NameSpace);
+                    sb.Append(".Data");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                }
+
+                sb.Append(TAB);
+                sb.Append("public class ");
+                sb.Append(sTable);
+                sb.Append("Data");
+                sb.AppendLine();
+                sb.Append(TAB);
+                sb.Append("private readonly string _ConnectionString = string.Empty;");
+                sb.AppendLine();
+                sb.Append("{");
+                sb.AppendLine();
+
+                sb.Append("public ");
+                sb.Append(sTable);
+                sb.Append("Data ");
+                sb.Append("(string ConnectionString)");
+                sb.AppendLine();
+                sb.Append("{");
+                sb.AppendLine();
+                sb.Append("_ConnectionString = ConnectionString;");
+                sb.AppendLine();
+                sb.Append("}");
+                sb.AppendLine();
+
+                if (List) 
+                {
+                    sb.Append(TAB);
+                    sb.Append("public List<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append("List() ");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append("IRepository<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append(sTable);
+                    sb.Append("Repository ");
+                    sb.AppendLine();
+                    sb.Append("List<");
+                    sb.Append(sTable);
+                    sb.Append(">");
+                    sb.Append(SPACE);
+                    sb.Append("l");
+                    sb.Append(sTable);
+                    sb.AppendLine();
+                    sb.Append("try ");
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository ");
+                    sb.Append(" = new ContextSQL<");
+                    sb.Append(sTable);
+                    sb.Append(">(_ConnectionString);");
+                    sb.AppendLine();
+                    sb.Append("l");
+                    sb.Append(sTable);
+                    sb.Append(" = ");
+                    sb.Append(sTable);
+                    sb.Append("Repository.List(); ");
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                    sb.Append(sbTryCatch.ToString());
+                    sb.AppendLine();
+                    sb.Append("return ");
+                    sb.Append("l");
+                    sb.Append(sTable);
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                }
+
+                if (Find)
+                {
+                    sb.Append("public List<dynamic> Find (");
+                    sb.Append(sTable);
+                    sb.Append(SPACE);
+                    sb.Append(sTable.ToLower());
+                    sb.Append(")");
+                    sb.AppendLine();
+                    sb.Append("List<dynamic> ldynamic;");
+                    sb.Append("try");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository ");
+                    sb.Append("new ContextSQL<");
+                    sb.Append(sTable);
+                    sb.Append(">(_ConnectionString);");
+                    sb.AppendLine();
+                    sb.Append("ldynamic");
+                    sb.Append(" = ");
+                    sb.Append(sTable);
+                    sb.Append("Repository.Find(");
+                    sb.Append(sTable.ToLower());
+                    sb.Append(");");
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                    sb.Append(sbTryCatch.ToString());
+                    sb.AppendLine();
+                    sb.Append("return ldynamic;");
+                }
+
+                if (Get) 
+                {
+                    sb.Append("public ");
+                    sb.Append(sTable);
+                    sb.Append(" Get(int Id) ");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.Append("IRepository<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append(sTable);
+                    sb.Append("Repository;");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append(SPACE);
+                    sb.Append("o");
+                    sb.Append(sTable);
+                    sb.Append(";");
+                    sb.AppendLine();
+                    sb.Append("try");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository = new ContextSQL<");
+                    sb.Append(sTable);
+                    sb.Append(">(_ConnectionString);");
+                    sb.AppendLine();
+                    sb.Append("o");
+                    sb.Append(sTable);
+                    sb.Append(" = ");
+                    sb.Append(sTable);
+                    sb.Append("Repository.Get(Id);");
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                    sb.Append(sbTryCatch.ToString());
+                    sb.AppendLine();
+                    sb.Append("return ");
+                    sb.Append("o");
+                    sb.Append(sTable);
+                    sb.Append(";");
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                }
+
+                if (Update) {
+                    sb.Append("public void Update(");
+                    sb.Append(sTable);
+                    sb.Append(SPACE);
+                    sb.Append(sTable.ToLower());
+                    sb.Append(")");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append("IRepository<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append(sTable);
+                    sb.Append("Repository;");
+                    sb.AppendLine();
+                    sb.Append("try");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository = new ContextSQL<");
+                    sb.Append(sTable);
+                    sb.Append(">(_ConnectionString);");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository.Update(");
+                    sb.Append(sTable.ToLower());
+                    sb.Append("); ");
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                    sb.Append(sbTryCatch.ToString());
+                    sb.AppendLine();
+                    sb.Append("}");
+                }
+
+                if (Insert) 
+                {
+                    sb.Append("public void Insert(");
+                    sb.Append(sTable);
+                    sb.Append(SPACE);
+                    sb.Append(sTable.ToLower());
+                    sb.Append(")");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+
+                    sb.Append("IRepository<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append(sTable);
+                    sb.Append("Repository;");
+                    sb.AppendLine();
+                    sb.Append("try");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository = new ContextSQL<");
+                    sb.Append(sTable);
+                    sb.Append(">(_ConnectionString);");
+                    sb.AppendLine();
+                    sb.Append(sTable);
+                    sb.Append("Repository.Insert(");
+                    sb.Append(sTable.ToLower());
+                    sb.Append(");");
+                    sb.AppendLine();
+                    sb.Append("}");
+                    sb.AppendLine();
+                    sb.Append(sbTryCatch.ToString());
+                    sb.Append("}");
+                    sb.AppendLine();
+                }
+
+                if (Delete) 
+                {
+                    sb.Append("public void Delete(int Id)");
+                    sb.AppendLine();
+                    sb.Append("IRepository<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append(sTable);
+                    sb.Append("Repository;");
+                    sb.AppendLine();
+                    sb.Append("try");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+                    sb.Append("");
+
+
+                }
+
+                /*
+
+
+        public void Delete(int Id)
+        {
+            IRepository<FinalTestMessage> FinalTestMessageRepository;
+            try
+            {
+            FinalTestMessageRepository = new ContextSQL<FinalTestMessage>(_ConnectionString);
+            FinalTestMessageRepository.Delete(Id);
+            }
+            catch(Exception)
+            {
+                throw;    
+            }
+        }
+     
+
+                */
+
+
+
+
+                sb.Append(TAB);
+                sb.Append("}");
+                sb.AppendLine();
+
+                if (NameSpace.Length > 3)
+                {
+                    sb.AppendLine();
+                    sb.Append("}");
+                }
+
+                sbFile.Append(sbNewPath.ToString());
+                sbFile.Append(sTable);
+                sbFile.Append(".cs");
+                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
+
+            }
+
+        }
+
+
+
+
 
 
     }
