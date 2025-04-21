@@ -86,6 +86,7 @@
             this.TableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Relation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnDataLayer = new System.Windows.Forms.Button();
+            this.btnBizLayer = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.gConection.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -609,7 +610,7 @@
             this.txtNamespace.Name = "txtNamespace";
             this.txtNamespace.Size = new System.Drawing.Size(268, 20);
             this.txtNamespace.TabIndex = 22;
-            this.txtNamespace.Text = "App.";
+            this.txtNamespace.Text = "WebApi";
             this.txtNamespace.Click += new System.EventHandler(this.txtNamespace_Click);
             // 
             // btnClose
@@ -722,10 +723,22 @@
             this.btnDataLayer.UseVisualStyleBackColor = true;
             this.btnDataLayer.Click += new System.EventHandler(this.btnDataLayer_Click);
             // 
+            // btnBizLayer
+            // 
+            this.btnBizLayer.Enabled = false;
+            this.btnBizLayer.Location = new System.Drawing.Point(646, 394);
+            this.btnBizLayer.Name = "btnBizLayer";
+            this.btnBizLayer.Size = new System.Drawing.Size(103, 34);
+            this.btnBizLayer.TabIndex = 21;
+            this.btnBizLayer.Text = "Create Class BizLayer";
+            this.btnBizLayer.UseVisualStyleBackColor = true;
+            this.btnBizLayer.Click += new System.EventHandler(this.btnBizLayer_Click);
+            // 
             // ucSQLServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnBizLayer);
             this.Controls.Add(this.btnDataLayer);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.groupBox3);
@@ -817,5 +830,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnDataLayer;
+        private System.Windows.Forms.Button btnBizLayer;
     }
 }

@@ -99,10 +99,6 @@ namespace UtilCoding
         private void CleanFields() 
         {
             gvTablesSQL.CleanRows();
-            chkIntegratedSecurity.Checked = false;
-            btnExport.Enabled = false;
-            btnCreateSP.Enabled = false;
-            btnCreateClass.Enabled = false;
         }
 
         private void CreateSP() 
@@ -114,6 +110,24 @@ namespace UtilCoding
             oSql.CreateSP(lTable,txtPathScript.Text,chkList.Checked,chkGet.Checked,chkFind.Checked,chkInsert.Checked,chkUpdate.Checked,chkDelete.Checked);
         }
 
+        private void CreateDataLayerClass() 
+        {
+            SQLServerManager oSql;
+            List<string> lTable = new List<string>();
+            oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
+            lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
+            oSql.CreateDataLayerClass(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseClass.Text,chkList.Checked,chkGet.Checked,chkFind.Checked,chkInsert.Checked,chkUpdate.Checked,chkDelete.Checked);
+        }
+
+        private void CreateBizLayerClass() 
+        {
+            SQLServerManager oSql;
+            List<string> lTable = new List<string>();
+            oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
+            lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
+            oSql.CreateBizLayerClass(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseClass.Text, chkList.Checked, chkGet.Checked, chkFind.Checked, chkInsert.Checked, chkUpdate.Checked, chkDelete.Checked);
+        }
+
         private void CreateClass() 
         {
             SQLServerManager oSql;
@@ -121,6 +135,15 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateClass(lTable, txtPathScript.Text, chkIncludePK.Checked , txtNamespace.Text,txtBaseClass.Text);
+        }
+
+        private void ButtonEnabled(bool Habilitar) 
+        {
+            btnExport.Enabled = Habilitar;
+            btnCreateSP.Enabled = Habilitar;
+            btnCreateClass.Enabled = Habilitar;
+            btnDataLayer.Enabled = Habilitar;
+            btnBizLayer.Enabled = Habilitar;
         }
 
         #endregion
@@ -131,10 +154,8 @@ namespace UtilCoding
         {
             try
             {
-                btnExport.Enabled = true;
-                btnCreateSP.Enabled = true;
-                btnCreateClass.Enabled = true;
                 GetTables();
+                ButtonEnabled(true);   
             }
             catch (AppException ex)
             {
@@ -249,6 +270,7 @@ namespace UtilCoding
             lblCargando.Visible = false;
             SetConfiguration();
             CleanFields();
+            ButtonEnabled(false);
             btnCancel.Enabled = false;
         }
 
@@ -367,9 +389,18 @@ namespace UtilCoding
         {
             SetConfiguration();
         }
+
         private void btnDataLayer_Click(object sender, EventArgs e)
         {
-
+            CreateDataLayerClass();
         }
+
+        private void btnBizLayer_Click(object sender, EventArgs e)
+        {
+            CreateBizLayerClass();
+        }
+
+
+
     }
 }
