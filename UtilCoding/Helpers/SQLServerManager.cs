@@ -2026,6 +2026,7 @@ namespace UtilCoding
                 sbDeclaracionData.Append("Data ");
                 sbDeclaracionData.Append("o");
                 sbDeclaracionData.Append(sTable);
+                sbDeclaracionData.Append("Data");
                 sbDeclaracionData.Append(" = new ");
                 sbDeclaracionData.Append(sTable);
                 sbDeclaracionData.Append("Data(); ");
@@ -2044,6 +2045,7 @@ namespace UtilCoding
                 sb.Append("using ");
                 sb.Append(NameSpace);
                 sb.Append(".Data;");
+                sb.AppendLine();
 
                 if (NameSpace.Length > 3)
                 {
@@ -2129,7 +2131,10 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("l");
                     sb.Append(sTable);
-                    sb.Append(" = Repository.List();");
+                    sb.Append(" = ");
+                    sb.Append("o");
+                    sb.Append(sTable);
+                    sb.Append("Data.List();");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2183,6 +2188,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("ldynamic");
                     sb.Append(" = ");
+                    sb.Append("o");
                     sb.Append(sTable);
                     sb.Append("Data.Find(");
                     sb.Append(sTable.ToLower());
@@ -2238,6 +2244,7 @@ namespace UtilCoding
                     sb.Append("o");
                     sb.Append(sTable);
                     sb.Append(" = ");
+                    sb.Append("o");
                     sb.Append(sTable);
                     sb.Append("Data.Get(Id);");
                     sb.AppendLine();
@@ -2287,6 +2294,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("o");
                     sb.Append(sTable);
                     sb.Append("Data.Update(");
                     sb.Append(sTable.ToLower());
@@ -2331,6 +2339,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("o");
                     sb.Append(sTable);
                     sb.Append("Data.Insert(");
                     sb.Append(sTable.ToLower());
@@ -2366,12 +2375,12 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("o");
                     sb.Append(sTable);
                     sb.Append("Data.Delete(Id);");
                     sb.AppendLine();
