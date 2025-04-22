@@ -2455,7 +2455,15 @@ namespace UtilCoding
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
-                sbTryCatch.Append("return ValidationProblem(\"Error\", \"Get\", 500, ex.Message);");
+                sbTryCatch.Append("return ValidationProblem(");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Error");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", ");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Get");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", 500, ex.Message);");
                 sbTryCatch.AppendLine();
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
@@ -2472,7 +2480,15 @@ namespace UtilCoding
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
-                sbTryCatch.Append("return ValidationProblem(\"Error\", \"Get\", 500, ex.Message);");
+                sbTryCatch.Append("return ValidationProblem(");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Error");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", ");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Get ");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", 500, ex.Message);");
                 sbTryCatch.AppendLine();
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
@@ -2531,8 +2547,11 @@ namespace UtilCoding
                 sb.Append("[ApiController]");
                 sb.AppendLine();
                 sb.Append(TAB);
-                sb.Append("[Route(\"api/[controller]\")]");
-
+                sb.Append("[Route(");
+                sb.Append(COMILLADOBLE);
+                sb.Append("api/[controller]");
+                sb.Append(COMILLADOBLE);
+                sb.Append(")]");
                 sb.AppendLine();
                 sb.Append(TAB);
                 sb.Append("public class ");
@@ -2591,17 +2610,43 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append(TAB);
                 sb.Append(TAB);
-                sb.Append("_ConectionString = _configuration.GetConnectionString(\"DefaultConnection\");");
+                sb.Append("_ConectionString = _configuration.GetConnectionString(");
+                sb.Append(COMILLADOBLE);
+                sb.Append("DefaultConnection");
+                sb.Append(COMILLADOBLE);
+                sb.Append(");");
                 sb.AppendLine();
 
                 sb.Append(TAB);
                 sb.Append(TAB);
                 sb.Append("}");
 
-
                 sb.AppendLine();
                 sb.AppendLine();
+                
+                
+                /*
 
+
+
+                        /// <summary>
+        /// Devuelve la lista de mensajes que se utilizan cuando uno completa el examen
+        /// por ej, para los niveles 1 y 2, y para preguntas contestadas entre 1 y 10, el mensaje puede ser estuviste bien, pero deberias esforzarte mas.
+        /// para los niveles 3 y 4, y para las preguntas contestadas entre 11 y 20, el mensaje puede ser estuviste genial.
+        /// </summary>
+        /// <param name="IdDependency">
+        /// la dependencia es la agrupacion de un grupo de preguntas
+        /// </param>
+        /// <returns>
+        /// devuelve la lista de mensajes asociados a niveles y valores de contestacion de preguntas.
+        /// </returns>
+
+
+
+
+
+
+                */
                 if (List)
                 {
                     sb.Append(TAB);
@@ -2650,7 +2695,7 @@ namespace UtilCoding
                     sb.Append(" = ");
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.List();");
+                    sb.Append("Biz.List();");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2659,10 +2704,13 @@ namespace UtilCoding
                     sb.Append(sbTryCatch.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("return ");
+                    sb.Append("return Ok(new {  ");
+                    sb.Append("list");
+                    sb.Append(sTable.ToLower() );
+                    sb.Append(" = ");
                     sb.Append("l");
                     sb.Append(sTable);
-                    sb.Append(";");
+                    sb.Append(")}); //OK 200);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2676,6 +2724,16 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("[HttpGet]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[AllowAnonymous]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("public List<dynamic> Find (");
                     sb.Append(sTable);
                     sb.Append(SPACE);
@@ -2686,7 +2744,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(sbDeclaracionData.ToString());
+                    sb.Append(sbDeclaracionBiz.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("List<dynamic> ldynamic;");
@@ -2731,6 +2789,16 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("[HttpGet]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[AllowAnonymous]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("public ");
                     sb.Append(sTable);
                     sb.Append(" Get(int Id) ");
@@ -2739,7 +2807,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(sbDeclaracionData.ToString());
+                    sb.Append(sbDeclaracionBiz.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(sTable);
@@ -2786,6 +2854,17 @@ namespace UtilCoding
 
                 if (Update)
                 {
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[HttpPut]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[AllowAnonymous]");
+                    sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("public void Update(");
@@ -2798,7 +2877,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(sbDeclaracionData.ToString());
+                    sb.Append(sbDeclaracionBiz.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("try");
@@ -2833,6 +2912,16 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("[HttpPost]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[AllowAnonymous]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("public void Insert(");
                     sb.Append(sTable);
                     sb.Append(SPACE);
@@ -2843,7 +2932,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(sbDeclaracionData.ToString());
+                    sb.Append(sbDeclaracionBiz.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("try");
@@ -2878,13 +2967,23 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("[HttpDelete]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[AllowAnonymous]");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("public void Delete(int Id)");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(sbDeclaracionData.ToString());
+                    sb.Append(sbDeclaracionBiz.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("try");
@@ -2925,11 +3024,11 @@ namespace UtilCoding
 
                 sbFile.Append(sbNewPath.ToString());
                 sbFile.Append(sTable);
-                sbFile.Append("Biz");
+                sbFile.Append("Controller");
                 sbFile.Append(".cs");
                 File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
             }
-            MessageBox.Show("Se creo la capa de Biz correctamente ", "");
+            MessageBox.Show("Se creo la capa de Controller correctamente ", "");
 
         }
 
