@@ -2421,6 +2421,8 @@ namespace UtilCoding
         {
             PackTableInfo oPack = new PackTableInfo();
             StringBuilder sbNewPath = new StringBuilder();
+            StringBuilder sbTryCatch = new StringBuilder();
+
             int TableId = 0;
 
             sbNewPath.Append(PathFile);
@@ -2432,68 +2434,74 @@ namespace UtilCoding
 
             oPack = GetTablesInfo(Tables);
 
+
+
+
+
+
+
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("catch (WebException ex) ");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("{");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("return ValidationProblem(");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append("Error");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append(", ");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append("Get");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append(", 500, ex.Message);");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("}");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("catch (Exception ex)");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("{");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("return ValidationProblem(");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append("Error");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append(", ");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append("Get ");
+            sbTryCatch.Append(COMILLADOBLE);
+            sbTryCatch.Append(", 500, ex.Message);");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("}");
+            sbTryCatch.AppendLine();
+
+
             foreach (string sTable in Tables)
             {
                 StringBuilder sb = new StringBuilder();
-                StringBuilder sbTryCatch = new StringBuilder();
                 StringBuilder sbDeclaracionBiz = new StringBuilder();
-
                 StringBuilder sbFile = new StringBuilder();
                 TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
                 TableId = oTableRelation.TableId;
                 List<TableColumn> lColumn = new List<TableColumn>();
-                lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
 
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("catch (WebException ex) ");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("{");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("return ValidationProblem(");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append("Error");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append(", ");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append("Get");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append(", 500, ex.Message);");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("}");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("catch (Exception ex)");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("{");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("return ValidationProblem(");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append("Error");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append(", ");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append("Get ");
-                sbTryCatch.Append(COMILLADOBLE);
-                sbTryCatch.Append(", 500, ex.Message);");
-                sbTryCatch.AppendLine();
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append(TAB);
-                sbTryCatch.Append("}");
-                sbTryCatch.AppendLine();
+                lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
 
                 sbDeclaracionBiz.Append(TAB);
                 sbDeclaracionBiz.Append(TAB);
@@ -2506,6 +2514,7 @@ namespace UtilCoding
                 sbDeclaracionBiz.Append(sTable);
                 sbDeclaracionBiz.Append("Biz(); ");
                 sbDeclaracionBiz.AppendLine();
+
 
                 sb.Append("using System.Collections.Generic;");
                 sb.AppendLine();
@@ -2620,40 +2629,60 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append(TAB);
                 sb.Append("}");
-
                 sb.AppendLine();
                 sb.AppendLine();
-                
-                
-                /*
 
-
-
-                        /// <summary>
-        /// Devuelve la lista de mensajes que se utilizan cuando uno completa el examen
-        /// por ej, para los niveles 1 y 2, y para preguntas contestadas entre 1 y 10, el mensaje puede ser estuviste bien, pero deberias esforzarte mas.
-        /// para los niveles 3 y 4, y para las preguntas contestadas entre 11 y 20, el mensaje puede ser estuviste genial.
-        /// </summary>
-        /// <param name="IdDependency">
-        /// la dependencia es la agrupacion de un grupo de preguntas
-        /// </param>
-        /// <returns>
-        /// devuelve la lista de mensajes asociados a niveles y valores de contestacion de preguntas.
-        /// </returns>
-
-
-
-
-
-
-                */
                 if (List)
                 {
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpGet]");
-                    sb.AppendLine();
 
+                    /*
+
+/// <summary>
+/// Devuelve la lista de mensajes que se utilizan cuando uno completa el examen
+/// por ej, para los niveles 1 y 2, y para preguntas contestadas entre 1 y 10, el mensaje puede ser estuviste bien, pero deberias esforzarte mas.
+/// para los niveles 3 y 4, y para las preguntas contestadas entre 11 y 20, el mensaje puede ser estuviste genial.
+/// </summary>
+/// <param name="IdDependency">
+/// la dependencia es la agrupacion de un grupo de preguntas
+/// </param>
+/// <returns>
+/// devuelve la lista de mensajes asociados a niveles y valores de contestacion de preguntas.
+/// </returns>
+
+*/
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// List  ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// devuelve la lista de ");
+                    sb.Append(sTable);
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </returns>");
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[HttpGet(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("List");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
+                    sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[AllowAnonymous]");
@@ -2724,7 +2753,66 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("[HttpGet]");
+                    sb.Append("/// <summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// Find  ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <param name=");  //<param name="IdDependency">
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(sTable.ToLower());
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(">");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("Esta entidad permite filtrar de manera sensilla por todos los campos que contiene");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("Los valores que son filtrables son de tipo string, ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// devuelve una lista dinamica de los valores obtenidos en la base de datos, puede alterar los valores sin problemas");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// o bien crear una entidad que sea exactamente igual a los valores que desea devolver y convertir la lista dinamica por lista de DTOs");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </returns>");
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[HttpGet(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("List");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
+                    sb.AppendLine();
+
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("[HttpGet(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Find");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
                     sb.AppendLine();
 
                     sb.Append(TAB);
@@ -2775,7 +2863,10 @@ namespace UtilCoding
                     sb.Append(sbTryCatch.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("return ldynamic;");
+                    sb.Append("return Ok(new {  list");
+                    sb.Append(sTable.ToLower());
+                    sb.Append(" = ldynamic");
+                    sb.Append("}); //OK 200);"); 
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2789,7 +2880,11 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("[HttpGet]");
+                    sb.Append("[HttpGet(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Get");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
                     sb.AppendLine();
 
                     sb.Append(TAB);
@@ -2813,6 +2908,9 @@ namespace UtilCoding
                     sb.Append(sTable);
                     sb.Append(" o");
                     sb.Append(sTable);
+                    sb.Append(" = new ");
+                    sb.Append(sTable);
+                    sb.Append("()");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2830,7 +2928,7 @@ namespace UtilCoding
                     sb.Append(" = ");
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.Get(Id);");
+                    sb.Append("Biz.Get(Id);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2839,10 +2937,11 @@ namespace UtilCoding
                     sb.Append(sbTryCatch.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("return ");
-                    sb.Append("o");
+                    sb.Append("return Ok(new {  ");
+                    sb.Append(sTable.ToLower());
+                    sb.Append(" = o");
                     sb.Append(sTable);
-                    sb.Append(";");
+                    sb.Append("}); //OK 200);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2854,10 +2953,13 @@ namespace UtilCoding
 
                 if (Update)
                 {
-
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("[HttpPut]");
+                    sb.Append("[HttpPut(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Update");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
                     sb.AppendLine();
 
                     sb.Append(TAB);
@@ -2891,7 +2993,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.Update(");
+                    sb.Append("Biz.Update(");
                     sb.Append(sTable.ToLower());
                     sb.Append("); ");
                     sb.AppendLine();
@@ -2900,6 +3002,12 @@ namespace UtilCoding
                     sb.Append("}");
                     sb.AppendLine();
                     sb.Append(sbTryCatch.ToString());
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("return Ok(); //OK 200");
+                    sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("}");
@@ -2912,7 +3020,11 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("[HttpPost]");
+                    sb.Append("[HttpPost(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Insert");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
                     sb.AppendLine();
 
                     sb.Append(TAB);
@@ -2946,7 +3058,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.Insert(");
+                    sb.Append("Biz.Insert(");
                     sb.Append(sTable.ToLower());
                     sb.Append(");");
                     sb.AppendLine();
@@ -2955,6 +3067,10 @@ namespace UtilCoding
                     sb.Append("}");
                     sb.AppendLine();
                     sb.Append(sbTryCatch.ToString());
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("return Created(); //OK 201");
+                    sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("}");
@@ -2967,7 +3083,11 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("[HttpDelete]");
+                    sb.Append("[HttpDelete(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Delete");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(")]");
                     sb.AppendLine();
 
                     sb.Append(TAB);
@@ -2997,13 +3117,19 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.Delete(Id);");
+                    sb.Append("Biz.Delete(Id);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("}");
                     sb.AppendLine();
                     sb.Append(sbTryCatch.ToString());
+                    
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("return Ok(); //OK 200");
+                    sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("}");

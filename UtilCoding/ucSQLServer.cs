@@ -137,6 +137,15 @@ namespace UtilCoding
             oSql.CreateClass(lTable, txtPathScript.Text, chkIncludePK.Checked , txtNamespace.Text,txtBaseClass.Text);
         }
 
+        private void CreateController() 
+        {
+            SQLServerManager oSql;
+            List<string> lTable = new List<string>();
+            oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
+            lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
+            oSql.CreateControllerClass(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseController.Text, chkList.Checked, chkGet.Checked, chkFind.Checked, chkInsert.Checked, chkUpdate.Checked, chkDelete.Checked);
+        }
+
         private void ButtonEnabled(bool Habilitar) 
         {
             btnExport.Enabled = Habilitar;
@@ -144,6 +153,7 @@ namespace UtilCoding
             btnCreateClass.Enabled = Habilitar;
             btnDataLayer.Enabled = Habilitar;
             btnBizLayer.Enabled = Habilitar;
+            btnCreateController.Enabled = Habilitar;
         }
 
         #endregion
@@ -400,7 +410,9 @@ namespace UtilCoding
             CreateBizLayerClass();
         }
 
-
-
+        private void btnCreateController_Click(object sender, EventArgs e)
+        {
+            CreateController();
+        }
     }
 }

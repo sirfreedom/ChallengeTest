@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.opSQL2005 = new System.Windows.Forms.RadioButton();
             this.opSQL2000 = new System.Windows.Forms.RadioButton();
@@ -87,6 +87,9 @@
             this.Relation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnDataLayer = new System.Windows.Forms.Button();
             this.btnBizLayer = new System.Windows.Forms.Button();
+            this.txtBaseController = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.btnCreateController = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.gConection.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -545,6 +548,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label14);
+            this.groupBox3.Controls.Add(this.txtBaseController);
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Controls.Add(this.chkIncludePK);
             this.groupBox3.Controls.Add(this.label12);
@@ -553,7 +558,7 @@
             this.groupBox3.Controls.Add(this.txtNamespace);
             this.groupBox3.Location = new System.Drawing.Point(3, 339);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(389, 109);
+            this.groupBox3.Size = new System.Drawing.Size(389, 149);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Class and Properties";
@@ -561,7 +566,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(210, 76);
+            this.label13.Location = new System.Drawing.Point(213, 94);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(173, 13);
             this.label13.TabIndex = 27;
@@ -570,21 +575,21 @@
             // chkIncludePK
             // 
             this.chkIncludePK.AutoSize = true;
-            this.chkIncludePK.Location = new System.Drawing.Point(136, 76);
+            this.chkIncludePK.Location = new System.Drawing.Point(232, 75);
             this.chkIncludePK.Name = "chkIncludePK";
-            this.chkIncludePK.Size = new System.Drawing.Size(77, 17);
+            this.chkIncludePK.Size = new System.Drawing.Size(147, 17);
             this.chkIncludePK.TabIndex = 26;
-            this.chkIncludePK.Text = "Include Pk";
+            this.chkIncludePK.Text = "Include Pk Class Property";
             this.chkIncludePK.UseVisualStyleBackColor = true;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(35, 48);
+            this.label12.Location = new System.Drawing.Point(7, 48);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(70, 13);
+            this.label12.Size = new System.Drawing.Size(100, 13);
             this.label12.TabIndex = 25;
-            this.label12.Text = "Base class ? ";
+            this.label12.Text = "Base class Property";
             // 
             // txtBaseClass
             // 
@@ -592,7 +597,7 @@
             this.txtBaseClass.Name = "txtBaseClass";
             this.txtBaseClass.Size = new System.Drawing.Size(268, 20);
             this.txtBaseClass.TabIndex = 24;
-            this.txtBaseClass.Text = "MyBaseClass";
+            this.txtBaseClass.Text = "EntityBase";
             this.txtBaseClass.Click += new System.EventHandler(this.txtBaseClass_Click);
             // 
             // label11
@@ -633,29 +638,29 @@
             this.gvTablesSQL.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gvTablesSQL.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.gvTablesSQL.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.PapayaWhip;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gvTablesSQL.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.PapayaWhip;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gvTablesSQL.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gvTablesSQL.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvTablesSQL.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.chkSel,
             this.TableId,
             this.TableName,
             this.Relation});
-            this.gvTablesSQL.DefaultCellStyle = dataGridViewCellStyle2;
+            this.gvTablesSQL.DefaultCellStyle = dataGridViewCellStyle1;
             this.gvTablesSQL.Location = new System.Drawing.Point(438, 5);
             this.gvTablesSQL.MultiSelect = true;
             this.gvTablesSQL.Name = "gvTablesSQL";
             this.gvTablesSQL.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.gvTablesSQL.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.gvTablesSQL.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gvTablesSQL.RowHeadersVisible = true;
             this.gvTablesSQL.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.gvTablesSQL.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.gvTablesSQL.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gvTablesSQL.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.gvTablesSQL.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gvTablesSQL.ShowCellErrors = false;
@@ -734,10 +739,38 @@
             this.btnBizLayer.UseVisualStyleBackColor = true;
             this.btnBizLayer.Click += new System.EventHandler(this.btnBizLayer_Click);
             // 
+            // txtBaseController
+            // 
+            this.txtBaseController.Location = new System.Drawing.Point(109, 110);
+            this.txtBaseController.Name = "txtBaseController";
+            this.txtBaseController.Size = new System.Drawing.Size(268, 20);
+            this.txtBaseController.TabIndex = 28;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(28, 114);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(78, 13);
+            this.label14.TabIndex = 29;
+            this.label14.Text = "Base Controller";
+            // 
+            // btnCreateController
+            // 
+            this.btnCreateController.Enabled = false;
+            this.btnCreateController.Location = new System.Drawing.Point(537, 394);
+            this.btnCreateController.Name = "btnCreateController";
+            this.btnCreateController.Size = new System.Drawing.Size(103, 34);
+            this.btnCreateController.TabIndex = 22;
+            this.btnCreateController.Text = "Create Class Controller";
+            this.btnCreateController.UseVisualStyleBackColor = true;
+            this.btnCreateController.Click += new System.EventHandler(this.btnCreateController_Click);
+            // 
             // ucSQLServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnCreateController);
             this.Controls.Add(this.btnBizLayer);
             this.Controls.Add(this.btnDataLayer);
             this.Controls.Add(this.btnClose);
@@ -831,5 +864,8 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnDataLayer;
         private System.Windows.Forms.Button btnBizLayer;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox txtBaseController;
+        private System.Windows.Forms.Button btnCreateController;
     }
 }
