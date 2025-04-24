@@ -326,8 +326,9 @@ namespace UtilCoding
                 {
                     throw new AppException("Verifique las tablas seleccionadas");
                 }
-
+                ButtonEnabled(false);
                 CreateSP();
+                ButtonEnabled(true);
                 gvTablesSQL.SeleccionarTodosLosRegistros("chkSel", false);
                 MessageBox.Show("Finalizo la exportacion de store procedures", "Procedures", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -402,17 +403,23 @@ namespace UtilCoding
 
         private void btnDataLayer_Click(object sender, EventArgs e)
         {
+            ButtonEnabled(false);
             CreateDataLayerClass();
+            ButtonEnabled(true);
         }
 
         private void btnBizLayer_Click(object sender, EventArgs e)
         {
+            ButtonEnabled(false);
             CreateBizLayerClass();
+            ButtonEnabled(true);
         }
 
         private void btnCreateController_Click(object sender, EventArgs e)
         {
+            ButtonEnabled(false);
             CreateController();
+            ButtonEnabled(true);
         }
     }
 }

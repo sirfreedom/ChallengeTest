@@ -893,6 +893,8 @@ namespace UtilCoding
                 List<TableColumn> lColumn = new List<TableColumn>();
                 List<string> lTypeColumnWhere = new List<string>() { "nvarchar", "ntext", "varchar", "text", "char", "bit" };
                 StringBuilder sbColums = new StringBuilder();
+                StringBuilder sbColumAntiNull = new StringBuilder();
+
                 StringBuilder sbJoin = new StringBuilder();
                 StringBuilder sbColumsWithoutId = new StringBuilder();
                 StringBuilder sbParam = new StringBuilder();
@@ -929,6 +931,12 @@ namespace UtilCoding
                         sbColums.Append(lColumn[i].ColumnName);
                         sbColums.Append("]");
 
+                        sbColumAntiNull.Append(sCapitalLetter);
+                        sbColumAntiNull.Append(".");
+                        sbColumAntiNull.Append("[");
+                        sbColumAntiNull.Append(lColumn[i].ColumnName);
+                        sbColumAntiNull.Append("]");
+
                         sbParam.Append("@");
                         sbParam.Append(lColumn[i].ColumnName);
                         sbParam.Append(" ");
@@ -941,6 +949,7 @@ namespace UtilCoding
                         {
                             sbColums.Append(",");
                             sbParam.Append(",");
+                            sbColumAntiNull.Append(",");
                         }
                     }
 
@@ -976,11 +985,23 @@ namespace UtilCoding
                                 iColumnWhereInsertedFind++;
 
                                 sbFindWhere.Append("( ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbFindWhere.Append("ISNULL(");
+                                }
+
                                 sbFindWhere.Append(sCapitalLetter);
                                 sbFindWhere.Append(".");
                                 sbFindWhere.Append("[");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
                                 sbFindWhere.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbFindWhere.Append(",'') ");
+                                }
+
                                 sbFindWhere.Append("like '%' + ");
                                 sbFindWhere.Append("@");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
@@ -1014,17 +1035,47 @@ namespace UtilCoding
                                 sbParam.Append("(");
                                 sbParam.Append(lColumn[i].ColumnLen);
                                 sbParam.Append(")");
-                                
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append("ISNULL(");
+                                }
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append(",'') AS ");
+                                    sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                    sbColumAntiNull.Append(SPACE);
+                                }
+
                                 break;
                             case "text":
                                 iColumnWhereInsertedFind++;
 
                                 sbFindWhere.Append("( ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbFindWhere.Append("ISNULL(");
+                                } 
+
                                 sbFindWhere.Append(sCapitalLetter);
                                 sbFindWhere.Append(".");
                                 sbFindWhere.Append("[");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
                                 sbFindWhere.Append("] ");
+                                
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbFindWhere.Append(",'') ");
+                                }
+
                                 sbFindWhere.Append("like '%' + ");
                                 sbFindWhere.Append("@");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
@@ -1048,6 +1099,24 @@ namespace UtilCoding
 
                                 sbParamFindWithoutId.AppendLine();
 
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append("ISNULL(");
+                                }
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append(",'') AS ");
+                                    sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                    sbColumAntiNull.Append(SPACE);
+                                }
+
                                 break;
                             case "bigint":  
                             case "smallint":
@@ -1057,6 +1126,25 @@ namespace UtilCoding
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
                                 sbParamInsertWithoutId.Append(" ");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumType);
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append("ISNULL(");
+                                }
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append(",0) AS ");
+                                    sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                    sbColumAntiNull.Append(SPACE);
+                                }
+
                                 break;
                             case "decimal":
                             case "smallmoney":
@@ -1067,6 +1155,31 @@ namespace UtilCoding
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
                                 sbParamInsertWithoutId.Append(" ");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumType);
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append("ISNULL(");
+                                }
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append(",0) AS ");
+                                    sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                    sbColumAntiNull.Append(SPACE);
+                                }
+
                                 break;
                             case "bit":
                                 iColumnWhereInsertedFind++;
@@ -1082,12 +1195,25 @@ namespace UtilCoding
                                 sbParamFindWithoutId.Append(lColumn[i].ColumType);
                                 sbParamFindWithoutId.AppendLine();
 
+
                                 sbFindWhere.Append("( ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbFindWhere.Append("ISNULL(");
+                                }
+
                                 sbFindWhere.Append(sCapitalLetter);
                                 sbFindWhere.Append(".");
                                 sbFindWhere.Append("[");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
                                 sbFindWhere.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbFindWhere.Append(",0) ");
+                                }
+
                                 sbFindWhere.Append(" = ");
                                 sbFindWhere.Append("@");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
@@ -1097,6 +1223,24 @@ namespace UtilCoding
                                 sbFindWhere.Append(" = ");
                                 sbFindWhere.Append(" 0 ");
                                 sbFindWhere.Append(" ) ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append("ISNULL(");
+                                }
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
+                                if (lColumn[i].AllowNull)
+                                {
+                                    sbColumAntiNull.Append(",0) AS ");
+                                    sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                    sbColumAntiNull.Append(SPACE);
+                                }
 
                                 break;
                             case "date":
@@ -1109,6 +1253,13 @@ namespace UtilCoding
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnName);
                                 sbParamInsertWithoutId.Append(" ");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumType);
+
+                                sbColumAntiNull.Append(sCapitalLetter);
+                                sbColumAntiNull.Append(".");
+                                sbColumAntiNull.Append("[");
+                                sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                sbColumAntiNull.Append("] ");
+
                                 break;
                             case "binary":
                             case "varbinary":
@@ -1119,6 +1270,7 @@ namespace UtilCoding
                         if (i < lColumn.Count -1 )
                         {
                             sbColums.Append(",");
+                            sbColumAntiNull.Append(",");
                             sbColumsWithoutId.Append(",");
                             sbParam.Append(",");
                             sbUpdate.Append(",");
@@ -1138,6 +1290,7 @@ namespace UtilCoding
                     if (isNeedNewLine)
                     {
                         sbColums.AppendLine();
+                        sbColumAntiNull.AppendLine();
                         sbParam.AppendLine();
                         sbUpdate.AppendLine();
                         sbParamInsertWithoutId.AppendLine();
@@ -1165,7 +1318,8 @@ namespace UtilCoding
 
                     sb.Append("Select");
                     sb.AppendLine();
-                    sb.Append(sbColums.ToString());
+                    sb.Append(sbColumAntiNull.ToString());
+                    sb.AppendLine();
                     sb.Append(" FROM ");
                     sb.Append(sTable);
                     sb.Append(" ");
@@ -1194,7 +1348,7 @@ namespace UtilCoding
 
                     sb.Append("SELECT TOP 1");
                     sb.AppendLine();
-                    sb.Append(sbColums.ToString());
+                    sb.Append(sbColumAntiNull.ToString());
                     sb.Append("FROM ");
                     sb.Append(sTable);
                     sb.Append(" ");
@@ -1227,12 +1381,12 @@ namespace UtilCoding
 
                     sb.Append("SELECT");
                     sb.AppendLine();
-                    sb.Append(sbColums.ToString());
+                    sb.Append(sbColumAntiNull.ToString());
                     sb.Append(" FROM ");
                     sb.Append(sTable);
-                    sb.Append(" ");
+                    sb.Append(SPACE);
                     sb.Append(sCapitalLetter);
-                    sb.Append(" ");
+                    sb.Append(SPACE);
                     sb.AppendLine();
                     sb.AppendLine("WHERE ");
                     sb.Append(sbFindWhere.ToString());
@@ -2434,12 +2588,6 @@ namespace UtilCoding
 
             oPack = GetTablesInfo(Tables);
 
-
-
-
-
-
-
             sbTryCatch.Append(TAB);
             sbTryCatch.Append(TAB);
             sbTryCatch.Append("catch (WebException ex) ");
@@ -2579,11 +2727,6 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append(TAB);
                 sb.Append("private readonly IConfiguration _configuration;");
-                sb.AppendLine();
-
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("private readonly string _ConectionString;");
                 sb.AppendLine();
 
                 sb.Append(TAB);
@@ -2802,6 +2945,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("public List<dynamic> Find (");
+                    sb.Append("[FromBody] ");
                     sb.Append(sTable);
                     sb.Append(SPACE);
                     sb.Append(sTable.ToLower());
@@ -2887,6 +3031,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// </param>");
+                    sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// <returns>");
@@ -3037,6 +3182,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("public void Update(");
+                    sb.Append("[FromBody] ");
                     sb.Append(sTable);
                     sb.Append(SPACE);
                     sb.Append(sTable.ToLower());
@@ -3114,15 +3260,6 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("Los valores que son filtrables son de tipo string, ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
                     sb.Append("/// </param>");
                     sb.AppendLine();
                     sb.Append(TAB);
@@ -3154,6 +3291,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("public void Insert(");
+                    sb.Append("[FromBody] ");
                     sb.Append(sTable);
                     sb.Append(SPACE);
                     sb.Append(sTable.ToLower());
