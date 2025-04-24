@@ -2634,23 +2634,6 @@ namespace UtilCoding
 
                 if (List)
                 {
-
-                    /*
-
-/// <summary>
-/// Devuelve la lista de mensajes que se utilizan cuando uno completa el examen
-/// por ej, para los niveles 1 y 2, y para preguntas contestadas entre 1 y 10, el mensaje puede ser estuviste bien, pero deberias esforzarte mas.
-/// para los niveles 3 y 4, y para las preguntas contestadas entre 11 y 20, el mensaje puede ser estuviste genial.
-/// </summary>
-/// <param name="IdDependency">
-/// la dependencia es la agrupacion de un grupo de preguntas
-/// </param>
-/// <returns>
-/// devuelve la lista de mensajes asociados a niveles y valores de contestacion de preguntas.
-/// </returns>
-
-*/
-
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// <summary>");
@@ -2675,6 +2658,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// </returns>");
+                    sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[HttpGet(");
@@ -2739,7 +2723,7 @@ namespace UtilCoding
                     sb.Append(" = ");
                     sb.Append("l");
                     sb.Append(sTable);
-                    sb.Append(")}); //OK 200);");
+                    sb.Append(" }); //OK 200);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2765,7 +2749,7 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// <param name=");  //<param name="IdDependency">
+                    sb.Append("/// <param name=");
                     sb.Append(COMILLADOBLE);
                     sb.Append(sTable.ToLower());
                     sb.Append(COMILLADOBLE);
@@ -2783,6 +2767,11 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("/// </param>");
+                    sb.AppendLine();
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("/// <returns>");
                     sb.AppendLine();
                     sb.Append(TAB);
@@ -2796,16 +2785,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// </returns>");
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpGet(");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("List");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(")]");
                     sb.AppendLine();
-
-
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[HttpGet(");
@@ -2814,7 +2794,6 @@ namespace UtilCoding
                     sb.Append(COMILLADOBLE);
                     sb.Append(")]");
                     sb.AppendLine();
-
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[AllowAnonymous]");
@@ -2878,6 +2857,50 @@ namespace UtilCoding
 
                 if (Get)
                 {
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// Get  ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <param name=");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Id");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(">");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("El Id es la clave unica PK de la entidad ");
+                    sb.Append(sTable);
+                    sb.Append(".");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </param>");
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// devuelve un objeto unico del tipo ");
+                    sb.Append(sTable);
+                    sb.Append(" .");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </returns>");
+                    sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[HttpGet(");
@@ -2955,6 +2978,50 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("/// <summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// Update  ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <param name=");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(sTable.ToLower());
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(">");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("Esta entidad permite actualizar todos los valores de la tabla ");
+                    sb.Append(sTable);
+                    sb.Append(".");
+
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </param>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// devuelve Status: 200 en caso de haber actualizado correctamente ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("[HttpPut(");
                     sb.Append(COMILLADOBLE);
                     sb.Append("Update");
@@ -3020,6 +3087,58 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("/// <summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// Insert  ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <param name=");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(sTable.ToLower());
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(">");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("Inserta todos los campos de la entidad ");
+                    sb.Append(sTable);
+                    sb.Append(".");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("Los valores que son filtrables son de tipo string, ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </param>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// devuelve un status: 201 si inserto correctamente ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("[HttpPost(");
                     sb.Append(COMILLADOBLE);
                     sb.Append("Insert");
@@ -3081,6 +3200,46 @@ namespace UtilCoding
 
                 if (Delete)
                 {
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// Delete ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </summary>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <param name=");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("Id");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append(">");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ");
+                    sb.Append("Elimina un valor particular de la entidad ");
+                    sb.Append(sTable);
+                    sb.Append(".");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// <returns>");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// devuelve un status: 200 si elimino correctamente ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </returns>");
+                    sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[HttpDelete(");
