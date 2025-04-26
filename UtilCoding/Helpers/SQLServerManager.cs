@@ -2599,6 +2599,11 @@ namespace UtilCoding
             sbTryCatch.Append(TAB);
             sbTryCatch.Append(TAB);
             sbTryCatch.Append(TAB);
+            sbTryCatch.Append("_logger.LogError(ex.Message, ex.InnerException, ex.StackTrace);");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
             sbTryCatch.Append("return ValidationProblem(");
             sbTryCatch.Append(COMILLADOBLE);
             sbTryCatch.Append("Error");
@@ -2620,6 +2625,11 @@ namespace UtilCoding
             sbTryCatch.Append(TAB);
             sbTryCatch.Append(TAB);
             sbTryCatch.Append("{");
+            sbTryCatch.AppendLine();
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append(TAB);
+            sbTryCatch.Append("_logger.LogError(ex.Message, ex.InnerException, ex.StackTrace);");
             sbTryCatch.AppendLine();
             sbTryCatch.Append(TAB);
             sbTryCatch.Append(TAB);
