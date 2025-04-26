@@ -2721,7 +2721,10 @@ namespace UtilCoding
                 sb.AppendLine();
                 sb.Append(TAB);
                 sb.Append(TAB);
-                sb.Append("private readonly ILogger<ValuesController> _logger;");
+                sb.Append("private readonly ILogger<");
+                sb.Append(sTable);
+                sb.Append("Controller");
+                sb.Append("> _logger;");
                 sb.AppendLine();
 
                 sb.Append(TAB);
@@ -2740,7 +2743,10 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append("public ");
                 sb.Append(sTable);
-                sb.Append("Controller(ILogger<ValuesController> logger, IConfiguration configuration)");
+                sb.Append("Controller(ILogger<");
+                sb.Append(sTable);
+                sb.Append("Controller");
+                sb.Append("> logger, IConfiguration configuration)");
                 sb.AppendLine();
                 sb.Append(TAB);
                 sb.Append(TAB);
