@@ -1572,6 +1572,10 @@ namespace UtilCoding
                         case "smallmoney":
                         case "money":
                         case "numeric":
+                        case "float":
+                        case "geography":
+                        case "geometry":
+                        case "real":
                             IsValidNull = true;
                             sb.Append("decimal");
                             break;
@@ -1593,6 +1597,9 @@ namespace UtilCoding
                         case "image":
                             sb.Append("byte[]");
                             break;
+                        default:
+                            sb.Append("object");
+                        break;
                     }
 
                     if (oTableColum.AllowNull && IsValidNull) 
@@ -1708,7 +1715,7 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append("public ");
                 sb.Append(sTable);
-                sb.Append("Biz ");
+                sb.Append("Data ");
                 sb.Append("(string ConnectionString)");
                 sb.AppendLine();
                 sb.Append(TAB);
@@ -1823,6 +1830,14 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
+                    sb.Append("IRepository<");
+                    sb.Append(sTable);
+                    sb.Append("> ");
+                    sb.Append(sTable);
+                    sb.Append("Repository; ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
                     sb.Append("try");
                     sb.AppendLine();
                     sb.Append(TAB);
@@ -1834,7 +1849,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(sTable);
                     sb.Append("Repository ");
-                    sb.Append("new ContextSQL<");
+                    sb.Append("= new ContextSQL<");
                     sb.Append(sTable);
                     sb.Append(">(_ConnectionString);");
                     sb.AppendLine();
@@ -2183,7 +2198,7 @@ namespace UtilCoding
                 sbDeclaracionData.Append("Data");
                 sbDeclaracionData.Append(" = new ");
                 sbDeclaracionData.Append(sTable);
-                sbDeclaracionData.Append("Data(); ");
+                sbDeclaracionData.Append("Data(_ConnectionString); ");
                 sbDeclaracionData.AppendLine();
 
                 sb.Append("using System.Collections.Generic;");
@@ -2232,7 +2247,7 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append("public ");
                 sb.Append(sTable);
-                sb.Append("Data ");
+                sb.Append("Biz ");
                 sb.Append("(string ConnectionString)");
                 sb.AppendLine();
                 sb.Append(TAB);
@@ -2383,6 +2398,7 @@ namespace UtilCoding
                     sb.Append(sTable);
                     sb.Append(" o");
                     sb.Append(sTable);
+                    sb.Append(";");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2670,7 +2686,7 @@ namespace UtilCoding
                 sbDeclaracionBiz.Append("Biz");
                 sbDeclaracionBiz.Append(" = new ");
                 sbDeclaracionBiz.Append(sTable);
-                sbDeclaracionBiz.Append("Biz(); ");
+                sbDeclaracionBiz.Append("Biz(_ConectionString); ");
                 sbDeclaracionBiz.AppendLine();
 
 
@@ -2833,10 +2849,7 @@ namespace UtilCoding
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public List<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append("List() ");
+                    sb.Append("public ActionResult List()");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2960,7 +2973,7 @@ namespace UtilCoding
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public List<dynamic> Find (");
+                    sb.Append("public ActionResult Find (");
                     sb.Append("[FromBody] ");
                     sb.Append(sTable);
                     sb.Append(SPACE);
@@ -2991,7 +3004,7 @@ namespace UtilCoding
                     sb.Append(" = ");
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.Find(");
+                    sb.Append("Biz.Find(");
                     sb.Append(sTable.ToLower());
                     sb.Append(");");
                     sb.AppendLine();
@@ -3078,8 +3091,7 @@ namespace UtilCoding
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public ");
-                    sb.Append(sTable);
+                    sb.Append("public ActionResult");
                     sb.Append(" Get(int Id) ");
                     sb.AppendLine();
                     sb.Append(TAB);
@@ -3094,7 +3106,7 @@ namespace UtilCoding
                     sb.Append(sTable);
                     sb.Append(" = new ");
                     sb.Append(sTable);
-                    sb.Append("()");
+                    sb.Append("();");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3197,7 +3209,7 @@ namespace UtilCoding
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public void Update(");
+                    sb.Append("public ActionResult Update(");
                     sb.Append("[FromBody] ");
                     sb.Append(sTable);
                     sb.Append(SPACE);
@@ -3306,7 +3318,7 @@ namespace UtilCoding
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public void Insert(");
+                    sb.Append("public ActionResult Insert(");
                     sb.Append("[FromBody] ");
                     sb.Append(sTable);
                     sb.Append(SPACE);
@@ -3410,7 +3422,7 @@ namespace UtilCoding
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public void Delete(int Id)");
+                    sb.Append("public ActionResult Delete(int Id)");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3487,4 +3499,5 @@ namespace UtilCoding
 
     }
 }
+
 
