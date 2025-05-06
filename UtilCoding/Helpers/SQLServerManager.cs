@@ -2815,7 +2815,8 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// List  ");
+                    sb.Append("/// Lista ");
+                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2829,6 +2830,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("/// devuelve la lista de ");
                     sb.Append(sTable);
+                    sb.Append(". generalmente usado para combos y lugares donde no necesitarias un filtro");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2913,7 +2915,8 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// Find  ");
+                    sb.Append("/// Busca un ");
+                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3036,7 +3039,8 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// Get  ");
+                    sb.Append("/// Devuelve un ");
+                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3155,7 +3159,8 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// Update  ");
+                    sb.Append("/// Actualiza ");
+                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3265,7 +3270,8 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// Insert  ");
+                    sb.Append("/// Inserta ");
+                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3372,7 +3378,7 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// Delete ");
+                    sb.Append("/// Insert  ");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3389,9 +3395,13 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// ");
-                    sb.Append("Elimina un valor particular de la entidad ");
+                    sb.Append("El Id es la clave unica PK de la entidad ");
                     sb.Append(sTable);
                     sb.Append(".");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// </param>");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3399,13 +3409,12 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// devuelve un status: 200 si elimino correctamente ");
+                    sb.Append("/// devuelve Status: 200 en caso de haber eliminado correctamente ");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// </returns>");
                     sb.AppendLine();
-
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("[HttpDelete(");
