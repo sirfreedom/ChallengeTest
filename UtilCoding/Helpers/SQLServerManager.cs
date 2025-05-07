@@ -177,7 +177,7 @@ namespace UtilCoding
                 sbConsultas.AppendLine();
 
                 //Consulta de Columnas
-                sbConsultas.AppendLine("select ");
+                sbConsultas.AppendLine("select distinct ");
                 sbConsultas.AppendLine("so.Id TableId,");
                 sbConsultas.AppendLine("sc.[name] ColumnName,");
                 sbConsultas.AppendLine("st.[name] ColumType,  ");
@@ -191,7 +191,7 @@ namespace UtilCoding
                 sbConsultas.AppendLine("WHERE t.name = so.[name] AND i.is_primary_key = 1) as NameColumnPK,");
                 sbConsultas.AppendLine("sc.isnullable as AllowNull ");
                 sbConsultas.AppendLine("from [syscolumns] sc ");
-                sbConsultas.AppendLine("inner join [systypes] st");
+                sbConsultas.AppendLine("inner join (select * from systypes where name not in ('geometry', 'hierarchyid')) st");
                 sbConsultas.AppendLine("on st.xtype = sc.xtype ");
                 sbConsultas.AppendLine("inner join [SYSOBJECTS] so");
                 sbConsultas.AppendLine("on sc.id = so.id ");
@@ -207,7 +207,7 @@ namespace UtilCoding
                 sbConsultas.AppendLine();
 
                 //Consulta de tablas relacionadas consigo mismas, para obtener un ordenamiento por su PrimaryKey y que no de error de insercion.
-                sbConsultas.AppendLine("SELECT");
+                sbConsultas.AppendLine("SELECT ");
                 sbConsultas.AppendLine("f.[parent_object_id] as TableId,");
                 sbConsultas.AppendLine("f.[object_id] as ObjectId,");
                 sbConsultas.AppendLine("f.[referenced_object_id] as TableForeingId,");
@@ -1145,6 +1145,7 @@ namespace UtilCoding
                                 }
 
                                 break;
+                            case "geography":
                             case "decimal":
                             case "smallmoney":
                             case "money":
