@@ -509,7 +509,6 @@ namespace UtilCoding
 
         #region Method Export 
 
-
         private string CommonCreateQueries(string ActiveTable, string Schema, TipoMotor MotorBaseDeDatos, DataTable dtActiveTable, DataSet dsTablesInfo, PackTableInfo oPack)
         {
             string sActiveIdTable = string.Empty;
@@ -3378,7 +3377,8 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// Insert  ");
+                    sb.Append("/// Elimina un registro de  ");
+                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);

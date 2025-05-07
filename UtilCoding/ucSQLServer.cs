@@ -279,7 +279,6 @@ namespace UtilCoding
         {
             lblCargando.Visible = false;
             SetConfiguration();
-            CleanFields();
             ButtonEnabled(false);
             btnCancel.Enabled = false;
         }
@@ -329,7 +328,6 @@ namespace UtilCoding
                 ButtonEnabled(false);
                 CreateSP();
                 ButtonEnabled(true);
-                gvTablesSQL.SeleccionarTodosLosRegistros("chkSel", false);
                 MessageBox.Show("Finalizo la exportacion de store procedures", "Procedures", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (AppException ex)
