@@ -1156,11 +1156,14 @@ namespace UtilCoding
                                 sbParamInsertWithoutId.Append(" ");
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumType);
 
-                                sbColumAntiNull.Append(sCapitalLetter);
-                                sbColumAntiNull.Append(".");
-                                sbColumAntiNull.Append("[");
-                                sbColumAntiNull.Append(lColumn[i].ColumnName);
-                                sbColumAntiNull.Append("] ");
+                                if (lColumn[i].AllowNull == false)
+                                {
+                                    sbColumAntiNull.Append(sCapitalLetter);
+                                    sbColumAntiNull.Append(".");
+                                    sbColumAntiNull.Append("[");
+                                    sbColumAntiNull.Append(lColumn[i].ColumnName);
+                                    sbColumAntiNull.Append("] ");
+                                }
 
                                 if (lColumn[i].AllowNull)
                                 {
@@ -1324,7 +1327,6 @@ namespace UtilCoding
                     sb.Append(sTable);
                     sb.Append(" ");
                     sb.Append(sCapitalLetter);
-                    sb.Append(" (nolock)");
                     sb.AppendLine();
                     sb.Append(sbFooter.ToString());
                     sb.AppendLine();
