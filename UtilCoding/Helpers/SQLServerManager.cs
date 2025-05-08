@@ -2106,7 +2106,6 @@ namespace UtilCoding
                     sb.Append("Repository = new ContextSQL<");
                     sb.Append(sTable);
                     sb.Append(">(_ConnectionString);");
-                    sb.Append(sTable);
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);

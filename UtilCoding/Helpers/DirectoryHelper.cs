@@ -235,6 +235,157 @@ namespace UtilCoding.Helpers
             return dt;
         }
 
+        /// <summary>
+        /// Busca por archivos con un nombre especifico o solo por extension.
+        /// </summary>
+        /// <param name="path">
+        /// ruta de busqueda
+        /// </param>
+        /// <param name="Extension">
+        /// Extension del archivo
+        /// </param>
+        /// <param name="FileName">
+        /// nombre del archivo opcional
+        /// </param>
+        /// <returns></returns>
+        public string FindCorrectFullPathFile(string path, string Extension, string FileName)
+        {
+            string[] lDirectory;
+            string[] lFiles;
+            string sReturn = string.Empty;
+            try
+            {
+                lDirectory = Directory.GetDirectories(path, "*.*", SearchOption.AllDirectories);
+
+                foreach (string sDirectory in lDirectory)
+                {
+                    if(lNonDirectory.Contains(sDirectory))
+                    {
+                        continue;
+                    }
+
+                    //its trying if exist the file.
+                    lFiles = Directory.GetFiles(sDirectory, (FileName == "" ? "*." : FileName) + "." + Extension);
+
+                    if (lFiles.Length > 0)
+                    {
+                        sReturn = lFiles[0];
+                        break;
+                    }
+                }
+
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new Exception("No es posible acceder a una o algunas carpetas seleccionadas, verifique los permisos");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return sReturn;
+        }
+
+
+        public void ReplaceText(string path, string OldText, string NewText, string Extension)
+        {
+            string sCurrentPath = string.Empty;
+            string[] lDirectory;
+            string[] lFiles;
+            string[] lLines;
+            int Processes = 0;
+            try
+            {
+
+                lDirectory = Directory.GetDirectories(path, "*.*", SearchOption.AllDirectories);
+
+                foreach (string sDirectory in lDirectory)
+                {
+                    if (lNonDirectory.Contains(sDirectory))
+                    {
+                        continue;
+                    }
+
+                    //its trying if exist the file.
+                    lFiles = Directory.GetFiles(sDirectory, (OldText == "" ? "*." : OldText) + "." + Extension);
+
+                    if (OldText != string.Empty && (lFiles.Length == 0 || lFiles.Length > 1))
+                    {
+                        continue;
+                    }
+
+                    for (int i = 0; i < lFiles.Length; i++)
+                    {
+                        //read all the lines in ... file.
+                        lLines = File.ReadAllLines(lFiles[i], Encoding.UTF8);
+
+                        //its Exists, 
+                        if (lLines.Where(x => x.Trim().Contains(OldText)).ToList().Count() == 1)
+                        {
+                            //i get index of the code line.
+                            int indice = lLines.Select((line, index) => new { Line = line, Index = index })
+                           .Where(x => x.Line.ToLower().Contains(OldText)).Select(x => x.Index).FirstOrDefault();
+
+                            //i replance old code to new code.
+                            lLines[indice] = lLines[indice].Replace(OldText,NewText);
+
+                            File.WriteAllLines(lFiles[i], lLines);
+                            Processes++;
+                        }
+                    }
+
+                }
+
+                if (Processes == 0)
+                {
+                    throw new Exception("No se encontro el archivo seleccionado en el directorio o path seleccionado verifique la informacion.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new Exception("No es posible acceder a una o algunas carpetas seleccionadas, verifique los permisos");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// una funcion que encuentra en un determinado path un archivo en particular.
+        /// </summary>
+        /// <param name="Path">
+        /// path de directorio
+        /// </param>
+        /// <param name="FileName">
+        /// Archivo a buscar.
+        /// </param>
+        /// <returns></returns>
+        public List<string> FindFiles(string Path, string FileName)
+        {
+            List<string> lReturn = new List<string>();
+            string[] lDirectory;
+            string[] lFiles;
+            try
+            {
+                lDirectory = Directory.GetDirectories(Path, "*.*", SearchOption.AllDirectories);
+
+                foreach (string d in lDirectory)
+                {
+                    lFiles = Directory.GetFiles(d, FileName);
+
+                    foreach (string f in lFiles)
+                    {
+                        lReturn.Add(f);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return lReturn;
+        }
 
         public class SearchText
         {

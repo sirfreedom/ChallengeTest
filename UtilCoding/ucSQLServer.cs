@@ -42,6 +42,7 @@ namespace UtilCoding
             opPunto.Checked = bool.Parse(ConfigurationHelper.Instance.Read("UtilSqlServer.DecimalSeparatorDot"));
             txtPathScript.Text = ConfigurationHelper.Instance.Read("UtilSqlServer.Path");
             chkIntegratedSecurity.Checked = bool.Parse(ConfigurationHelper.Instance.Read("UtilSqlServer.IntegratedSecurity"));
+            txtNamespace.Text = ConfigurationHelper.Instance.Read("UtilSqlServer.Namespace");
         }
 
         private void SetConfiguration() 
@@ -55,6 +56,7 @@ namespace UtilCoding
             ConfigurationHelper.Instance.Save("UtilSqlServer.TopRows", txtTotalRegistros.Text);
             ConfigurationHelper.Instance.Save("UtilSqlServer.DecimalSeparatorDot", opPunto.Checked.ToString());
             ConfigurationHelper.Instance.Save("UtilSqlServer.Path", txtPathScript.Text);
+            ConfigurationHelper.Instance.Save("UtilSqlServer.Namespace", txtPathScript.Text);
             ConfigurationHelper.Instance.Save("UtilSqlServer.IntegratedSecurity", chkIntegratedSecurity.Checked.ToString());
         }
 
@@ -362,8 +364,6 @@ namespace UtilCoding
                 }
 
                 CreateClass();
-                
-                gvTablesSQL.SeleccionarTodosLosRegistros("chkSel", false);
                 MessageBox.Show("Finalizo la exportacion de class con sus propiedades", "Classes", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (AppException ex)
