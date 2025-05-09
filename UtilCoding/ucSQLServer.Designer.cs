@@ -71,8 +71,9 @@
             this.chkUpdate = new System.Windows.Forms.CheckBox();
             this.chkFind = new System.Windows.Forms.CheckBox();
             this.chkGet = new System.Windows.Forms.CheckBox();
-            this.btnCreateClass = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txtBaseController = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.chkIncludePK = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -85,16 +86,19 @@
             this.TableId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Relation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnDataLayer = new System.Windows.Forms.Button();
-            this.btnBizLayer = new System.Windows.Forms.Button();
-            this.txtBaseController = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.btnCreateController = new System.Windows.Forms.Button();
+            this.chkStoreProcedure = new System.Windows.Forms.CheckBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.chkClass = new System.Windows.Forms.CheckBox();
+            this.chkDataLayer = new System.Windows.Forms.CheckBox();
+            this.chkBizLayer = new System.Windows.Forms.CheckBox();
+            this.chkControllerLayer = new System.Windows.Forms.CheckBox();
+            this.chkModelClass = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.gConection.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvTablesSQL)).BeginInit();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -102,7 +106,7 @@
             this.groupBox1.Controls.Add(this.opSQL2005);
             this.groupBox1.Controls.Add(this.opSQL2000);
             this.groupBox1.Controls.Add(this.opOracle);
-            this.groupBox1.Location = new System.Drawing.Point(774, 338);
+            this.groupBox1.Location = new System.Drawing.Point(776, 235);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(411, 50);
             this.groupBox1.TabIndex = 11;
@@ -144,7 +148,7 @@
             // btnCancel
             // 
             this.btnCancel.Enabled = false;
-            this.btnCancel.Location = new System.Drawing.Point(438, 303);
+            this.btnCancel.Location = new System.Drawing.Point(440, 200);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(106, 27);
             this.btnCancel.TabIndex = 10;
@@ -155,9 +159,9 @@
             // btnExport
             // 
             this.btnExport.Enabled = false;
-            this.btnExport.Location = new System.Drawing.Point(1082, 394);
+            this.btnExport.Location = new System.Drawing.Point(555, 233);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(103, 34);
+            this.btnExport.Size = new System.Drawing.Size(103, 52);
             this.btnExport.TabIndex = 9;
             this.btnExport.Text = "Export Data";
             this.btnExport.UseVisualStyleBackColor = true;
@@ -405,7 +409,7 @@
             this.lblCargando.AutoSize = true;
             this.lblCargando.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCargando.ForeColor = System.Drawing.Color.Red;
-            this.lblCargando.Location = new System.Drawing.Point(774, 303);
+            this.lblCargando.Location = new System.Drawing.Point(776, 200);
             this.lblCargando.Name = "lblCargando";
             this.lblCargando.Size = new System.Drawing.Size(105, 24);
             this.lblCargando.TabIndex = 6;
@@ -419,7 +423,7 @@
             // 
             // btnSeleccionarTodos
             // 
-            this.btnSeleccionarTodos.Location = new System.Drawing.Point(662, 303);
+            this.btnSeleccionarTodos.Location = new System.Drawing.Point(664, 200);
             this.btnSeleccionarTodos.Name = "btnSeleccionarTodos";
             this.btnSeleccionarTodos.Size = new System.Drawing.Size(106, 27);
             this.btnSeleccionarTodos.TabIndex = 12;
@@ -430,17 +434,17 @@
             // btnCreateSP
             // 
             this.btnCreateSP.Enabled = false;
-            this.btnCreateSP.Location = new System.Drawing.Point(973, 394);
+            this.btnCreateSP.Location = new System.Drawing.Point(307, 42);
             this.btnCreateSP.Name = "btnCreateSP";
-            this.btnCreateSP.Size = new System.Drawing.Size(103, 34);
+            this.btnCreateSP.Size = new System.Drawing.Size(103, 52);
             this.btnCreateSP.TabIndex = 13;
-            this.btnCreateSP.Text = "Create SP";
+            this.btnCreateSP.Text = "Create";
             this.btnCreateSP.UseVisualStyleBackColor = true;
             this.btnCreateSP.Click += new System.EventHandler(this.btnCreateSP_Click);
             // 
             // btnUnselect
             // 
-            this.btnUnselect.Location = new System.Drawing.Point(550, 303);
+            this.btnUnselect.Location = new System.Drawing.Point(552, 200);
             this.btnUnselect.Name = "btnUnselect";
             this.btnUnselect.Size = new System.Drawing.Size(106, 27);
             this.btnUnselect.TabIndex = 14;
@@ -470,7 +474,7 @@
             this.groupBox2.Controls.Add(this.chkGet);
             this.groupBox2.Location = new System.Drawing.Point(3, 283);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(389, 50);
+            this.groupBox2.Size = new System.Drawing.Size(420, 47);
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Export SP";
@@ -535,17 +539,6 @@
             this.chkGet.Text = "Get";
             this.chkGet.UseVisualStyleBackColor = true;
             // 
-            // btnCreateClass
-            // 
-            this.btnCreateClass.Enabled = false;
-            this.btnCreateClass.Location = new System.Drawing.Point(864, 394);
-            this.btnCreateClass.Name = "btnCreateClass";
-            this.btnCreateClass.Size = new System.Drawing.Size(103, 34);
-            this.btnCreateClass.TabIndex = 17;
-            this.btnCreateClass.Text = "Create Class with Properties";
-            this.btnCreateClass.UseVisualStyleBackColor = true;
-            this.btnCreateClass.Click += new System.EventHandler(this.btnCreateClass_Click);
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.label14);
@@ -556,17 +549,33 @@
             this.groupBox3.Controls.Add(this.txtBaseClass);
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.txtNamespace);
-            this.groupBox3.Location = new System.Drawing.Point(3, 339);
+            this.groupBox3.Location = new System.Drawing.Point(440, 291);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(389, 149);
+            this.groupBox3.Size = new System.Drawing.Size(389, 145);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Class and Properties";
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(27, 114);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(78, 13);
+            this.label14.TabIndex = 29;
+            this.label14.Text = "Base Controller";
+            // 
+            // txtBaseController
+            // 
+            this.txtBaseController.Location = new System.Drawing.Point(108, 110);
+            this.txtBaseController.Name = "txtBaseController";
+            this.txtBaseController.Size = new System.Drawing.Size(268, 20);
+            this.txtBaseController.TabIndex = 28;
+            // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(213, 94);
+            this.label13.Location = new System.Drawing.Point(212, 94);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(173, 13);
             this.label13.TabIndex = 27;
@@ -575,7 +584,7 @@
             // chkIncludePK
             // 
             this.chkIncludePK.AutoSize = true;
-            this.chkIncludePK.Location = new System.Drawing.Point(232, 75);
+            this.chkIncludePK.Location = new System.Drawing.Point(231, 75);
             this.chkIncludePK.Name = "chkIncludePK";
             this.chkIncludePK.Size = new System.Drawing.Size(147, 17);
             this.chkIncludePK.TabIndex = 26;
@@ -585,7 +594,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(7, 48);
+            this.label12.Location = new System.Drawing.Point(6, 48);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(100, 13);
             this.label12.TabIndex = 25;
@@ -593,7 +602,7 @@
             // 
             // txtBaseClass
             // 
-            this.txtBaseClass.Location = new System.Drawing.Point(111, 45);
+            this.txtBaseClass.Location = new System.Drawing.Point(110, 45);
             this.txtBaseClass.Name = "txtBaseClass";
             this.txtBaseClass.Size = new System.Drawing.Size(268, 20);
             this.txtBaseClass.TabIndex = 24;
@@ -603,7 +612,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(24, 22);
+            this.label11.Location = new System.Drawing.Point(23, 22);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(87, 13);
             this.label11.TabIndex = 23;
@@ -611,7 +620,7 @@
             // 
             // txtNamespace
             // 
-            this.txtNamespace.Location = new System.Drawing.Point(111, 19);
+            this.txtNamespace.Location = new System.Drawing.Point(110, 19);
             this.txtNamespace.Name = "txtNamespace";
             this.txtNamespace.Size = new System.Drawing.Size(268, 20);
             this.txtNamespace.TabIndex = 22;
@@ -620,7 +629,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(662, 336);
+            this.btnClose.Location = new System.Drawing.Point(664, 233);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(106, 52);
             this.btnClose.TabIndex = 19;
@@ -653,7 +662,7 @@
             this.TableName,
             this.Relation});
             this.gvTablesSQL.DefaultCellStyle = dataGridViewCellStyle1;
-            this.gvTablesSQL.Location = new System.Drawing.Point(438, 5);
+            this.gvTablesSQL.Location = new System.Drawing.Point(446, 17);
             this.gvTablesSQL.MultiSelect = true;
             this.gvTablesSQL.Name = "gvTablesSQL";
             this.gvTablesSQL.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -667,7 +676,7 @@
             this.gvTablesSQL.ShowCellToolTips = false;
             this.gvTablesSQL.ShowEditingIcon = false;
             this.gvTablesSQL.ShowRowErrors = false;
-            this.gvTablesSQL.Size = new System.Drawing.Size(756, 288);
+            this.gvTablesSQL.Size = new System.Drawing.Size(756, 180);
             this.gvTablesSQL.TabIndex = 8;
             this.gvTablesSQL.VerticalScrollBarValue = 0;
             // 
@@ -717,68 +726,103 @@
             this.Relation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Relation.Width = 77;
             // 
-            // btnDataLayer
+            // chkStoreProcedure
             // 
-            this.btnDataLayer.Enabled = false;
-            this.btnDataLayer.Location = new System.Drawing.Point(755, 394);
-            this.btnDataLayer.Name = "btnDataLayer";
-            this.btnDataLayer.Size = new System.Drawing.Size(103, 34);
-            this.btnDataLayer.TabIndex = 20;
-            this.btnDataLayer.Text = "Create Class DataLayer";
-            this.btnDataLayer.UseVisualStyleBackColor = true;
-            this.btnDataLayer.Click += new System.EventHandler(this.btnDataLayer_Click);
+            this.chkStoreProcedure.AutoSize = true;
+            this.chkStoreProcedure.Checked = true;
+            this.chkStoreProcedure.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkStoreProcedure.Location = new System.Drawing.Point(10, 23);
+            this.chkStoreProcedure.Name = "chkStoreProcedure";
+            this.chkStoreProcedure.Size = new System.Drawing.Size(108, 17);
+            this.chkStoreProcedure.TabIndex = 20;
+            this.chkStoreProcedure.Text = "Store Procedures";
+            this.chkStoreProcedure.UseVisualStyleBackColor = true;
             // 
-            // btnBizLayer
+            // groupBox4
             // 
-            this.btnBizLayer.Enabled = false;
-            this.btnBizLayer.Location = new System.Drawing.Point(646, 394);
-            this.btnBizLayer.Name = "btnBizLayer";
-            this.btnBizLayer.Size = new System.Drawing.Size(103, 34);
-            this.btnBizLayer.TabIndex = 21;
-            this.btnBizLayer.Text = "Create Class BizLayer";
-            this.btnBizLayer.UseVisualStyleBackColor = true;
-            this.btnBizLayer.Click += new System.EventHandler(this.btnBizLayer_Click);
+            this.groupBox4.Controls.Add(this.chkModelClass);
+            this.groupBox4.Controls.Add(this.chkControllerLayer);
+            this.groupBox4.Controls.Add(this.chkBizLayer);
+            this.groupBox4.Controls.Add(this.chkDataLayer);
+            this.groupBox4.Controls.Add(this.chkClass);
+            this.groupBox4.Controls.Add(this.btnCreateSP);
+            this.groupBox4.Controls.Add(this.chkStoreProcedure);
+            this.groupBox4.Location = new System.Drawing.Point(3, 336);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(420, 100);
+            this.groupBox4.TabIndex = 21;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Export Model";
             // 
-            // txtBaseController
+            // chkClass
             // 
-            this.txtBaseController.Location = new System.Drawing.Point(109, 110);
-            this.txtBaseController.Name = "txtBaseController";
-            this.txtBaseController.Size = new System.Drawing.Size(268, 20);
-            this.txtBaseController.TabIndex = 28;
+            this.chkClass.AutoSize = true;
+            this.chkClass.Checked = true;
+            this.chkClass.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkClass.Location = new System.Drawing.Point(123, 21);
+            this.chkClass.Name = "chkClass";
+            this.chkClass.Size = new System.Drawing.Size(57, 17);
+            this.chkClass.TabIndex = 21;
+            this.chkClass.Text = "Clases";
+            this.chkClass.UseVisualStyleBackColor = true;
             // 
-            // label14
+            // chkDataLayer
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(28, 114);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(78, 13);
-            this.label14.TabIndex = 29;
-            this.label14.Text = "Base Controller";
+            this.chkDataLayer.AutoSize = true;
+            this.chkDataLayer.Checked = true;
+            this.chkDataLayer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDataLayer.Location = new System.Drawing.Point(186, 21);
+            this.chkDataLayer.Name = "chkDataLayer";
+            this.chkDataLayer.Size = new System.Drawing.Size(78, 17);
+            this.chkDataLayer.TabIndex = 22;
+            this.chkDataLayer.Text = "Data Layer";
+            this.chkDataLayer.UseVisualStyleBackColor = true;
             // 
-            // btnCreateController
+            // chkBizLayer
             // 
-            this.btnCreateController.Enabled = false;
-            this.btnCreateController.Location = new System.Drawing.Point(537, 394);
-            this.btnCreateController.Name = "btnCreateController";
-            this.btnCreateController.Size = new System.Drawing.Size(103, 34);
-            this.btnCreateController.TabIndex = 22;
-            this.btnCreateController.Text = "Create Class Controller";
-            this.btnCreateController.UseVisualStyleBackColor = true;
-            this.btnCreateController.Click += new System.EventHandler(this.btnCreateController_Click);
+            this.chkBizLayer.AutoSize = true;
+            this.chkBizLayer.Checked = true;
+            this.chkBizLayer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkBizLayer.Location = new System.Drawing.Point(270, 19);
+            this.chkBizLayer.Name = "chkBizLayer";
+            this.chkBizLayer.Size = new System.Drawing.Size(69, 17);
+            this.chkBizLayer.TabIndex = 23;
+            this.chkBizLayer.Text = "Biz Layer";
+            this.chkBizLayer.UseVisualStyleBackColor = true;
+            // 
+            // chkControllerLayer
+            // 
+            this.chkControllerLayer.AutoSize = true;
+            this.chkControllerLayer.Checked = true;
+            this.chkControllerLayer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkControllerLayer.Location = new System.Drawing.Point(10, 46);
+            this.chkControllerLayer.Name = "chkControllerLayer";
+            this.chkControllerLayer.Size = new System.Drawing.Size(99, 17);
+            this.chkControllerLayer.TabIndex = 24;
+            this.chkControllerLayer.Text = "Controller Layer";
+            this.chkControllerLayer.UseVisualStyleBackColor = true;
+            // 
+            // chkModelClass
+            // 
+            this.chkModelClass.AutoSize = true;
+            this.chkModelClass.Checked = true;
+            this.chkModelClass.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkModelClass.Location = new System.Drawing.Point(123, 46);
+            this.chkModelClass.Name = "chkModelClass";
+            this.chkModelClass.Size = new System.Drawing.Size(83, 17);
+            this.chkModelClass.TabIndex = 25;
+            this.chkModelClass.Text = "Model Class";
+            this.chkModelClass.UseVisualStyleBackColor = true;
             // 
             // ucSQLServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.btnCreateController);
-            this.Controls.Add(this.btnBizLayer);
-            this.Controls.Add(this.btnDataLayer);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.btnCreateClass);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnUnselect);
-            this.Controls.Add(this.btnCreateSP);
             this.Controls.Add(this.btnSeleccionarTodos);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancel);
@@ -787,7 +831,7 @@
             this.Controls.Add(this.gConection);
             this.Controls.Add(this.lblCargando);
             this.Name = "ucSQLServer";
-            this.Size = new System.Drawing.Size(1452, 610);
+            this.Size = new System.Drawing.Size(1346, 446);
             this.Load += new System.EventHandler(this.ucSQLServer_Load);
             this.Leave += new System.EventHandler(this.ucSQLServer_Leave);
             this.groupBox1.ResumeLayout(false);
@@ -799,6 +843,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvTablesSQL)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -853,7 +899,6 @@
         private System.Windows.Forms.CheckBox chkFind;
         private System.Windows.Forms.CheckBox chkGet;
         private System.Windows.Forms.CheckBox chkInsert;
-        private System.Windows.Forms.Button btnCreateClass;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox txtBaseClass;
@@ -862,10 +907,14 @@
         private System.Windows.Forms.CheckBox chkIncludePK;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.Button btnDataLayer;
-        private System.Windows.Forms.Button btnBizLayer;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox txtBaseController;
-        private System.Windows.Forms.Button btnCreateController;
+        private System.Windows.Forms.CheckBox chkStoreProcedure;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox chkClass;
+        private System.Windows.Forms.CheckBox chkModelClass;
+        private System.Windows.Forms.CheckBox chkControllerLayer;
+        private System.Windows.Forms.CheckBox chkBizLayer;
+        private System.Windows.Forms.CheckBox chkDataLayer;
     }
 }

@@ -1634,6 +1634,152 @@ namespace UtilCoding
             }
         }
 
+        public void CreateClassModel(List<string> Tables, string PathFile, string NameSpace = "", string BaseClass = "")
+        {
+            PackTableInfo oPack = new PackTableInfo();
+            StringBuilder sbNewPath = new StringBuilder();
+            int TableId = 0;
+
+            sbNewPath.Append(PathFile);
+            sbNewPath.Append("Class_");
+            sbNewPath.Append(DateTime.Now.Ticks.ToString());
+            sbNewPath.Append(@"\");
+
+            Directory.CreateDirectory(sbNewPath.ToString());
+
+            oPack = GetTablesInfo(Tables);
+
+            foreach (string sTable in Tables)
+            {
+                StringBuilder sb = new StringBuilder();
+                StringBuilder sbFile = new StringBuilder();
+                TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
+                TableId = oTableRelation.TableId;
+                List<TableColumn> lColumn = new List<TableColumn>();
+                lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
+
+                sb.AppendLine();
+
+                if (NameSpace.Length > 3)
+                {
+                    sb.Append("namespace ");
+                    sb.Append(NameSpace);
+                    sb.Append(".Entity");
+                    sb.AppendLine();
+                    sb.Append("{");
+                    sb.AppendLine();
+                }
+
+                sb.Append(TAB);
+                sb.Append("public class ");
+                sb.Append(sTable);
+
+                if (BaseClass.Length > 0)
+                {
+                    sb.Append(" : ");
+                    sb.Append(BaseClass);
+                }
+
+                sb.AppendLine();
+                sb.Append(TAB);
+                sb.Append("{");
+                sb.AppendLine();
+
+                foreach (TableColumn oTableColum in lColumn)
+                {
+                    bool IsValidNull = false;
+
+                    if (oTableColum.NameColumnPK == oTableColum.ColumnName)
+                    {
+                        continue;
+                    }
+
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("public ");
+
+                    switch (oTableColum.ColumType)
+                    {
+                        case "nvarchar":
+                        case "ntext":
+                        case "varchar":
+                        case "text":
+                        case "char":
+                        case "xml":
+                            sb.Append("string");
+                            break;
+                        case "bigint":
+                        case "smallint":
+                        case "int":
+                        case "tinyint":
+                            IsValidNull = true;
+                            sb.Append("int");
+                            break;
+                        case "decimal":
+                        case "smallmoney":
+                        case "money":
+                        case "numeric":
+                        case "float":
+                        case "geography":
+                        case "geometry":
+                        case "real":
+                            IsValidNull = true;
+                            sb.Append("decimal");
+                            break;
+                        case "bit":
+                            IsValidNull = true;
+                            sb.Append("bool");
+                            break;
+                        case "date":
+                        case "datetimeoffset":
+                        case "datetime2":
+                        case "smalldatetime":
+                        case "datetime":
+                        case "time":
+                            IsValidNull = true;
+                            sb.Append("System.DateTime");
+                            break;
+                        case "binary":
+                        case "varbinary":
+                        case "image":
+                            sb.Append("byte[]");
+                            break;
+                        default:
+                            sb.Append("object");
+                            break;
+                    }
+
+                    if (oTableColum.AllowNull && IsValidNull)
+                    {
+                        sb.Append("?");
+                    }
+
+                    sb.Append(SPACE);
+                    sb.Append(oTableColum.ColumnName);
+                    sb.Append(SPACE);
+                    sb.Append("{ get; set; }");
+                    sb.AppendLine();
+                }
+
+                sb.Append(TAB);
+                sb.Append("}");
+                sb.AppendLine();
+
+                if (NameSpace.Length > 3)
+                {
+                    sb.AppendLine();
+                    sb.Append("}");
+                }
+
+                sbFile.Append(sbNewPath.ToString());
+                sbFile.Append(sTable);
+                sbFile.Append("Model");
+                sbFile.Append(".cs");
+                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
+
+            }
+        }
+
         public void CreateDataLayerClass(List<string> Tables, string PathFile, string NameSpace = "", string BaseClass = "", bool List = false, bool Get = false, bool Find = false, bool Insert = false, bool Update = false, bool Delete = false) 
         {
             PackTableInfo oPack = new PackTableInfo();
@@ -1816,11 +1962,7 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public List<dynamic> Find (");
-                    sb.Append(sTable);
-                    sb.Append(SPACE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append(")");
+                    sb.Append("public List<dynamic> Find (Dictionary<string, string> lParam)");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -1861,9 +2003,7 @@ namespace UtilCoding
                     sb.Append("ldynamic");
                     sb.Append(" = ");
                     sb.Append(sTable);
-                    sb.Append("Repository.Find(");
-                    sb.Append(sTable.ToLower());
-                    sb.Append(");");
+                    sb.Append("Repository.Find(lParam);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2330,11 +2470,7 @@ namespace UtilCoding
                 {
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public List<dynamic> Find (");
-                    sb.Append(sTable);
-                    sb.Append(SPACE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append(")");
+                    sb.Append("public List<dynamic> Find (Dictionary<string, string> lParam)");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2360,9 +2496,7 @@ namespace UtilCoding
                     sb.Append(" = ");
                     sb.Append("o");
                     sb.Append(sTable);
-                    sb.Append("Data.Find(");
-                    sb.Append(sTable.ToLower());
-                    sb.Append(");");
+                    sb.Append("Data.Find(lParam);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2928,6 +3062,7 @@ namespace UtilCoding
                     sb.Append("/// <param name=");
                     sb.Append(COMILLADOBLE);
                     sb.Append(sTable.ToLower());
+                    sb.Append("Model");
                     sb.Append(COMILLADOBLE);
                     sb.Append(">");
                     sb.AppendLine();
@@ -2980,6 +3115,7 @@ namespace UtilCoding
                     sb.Append("public ActionResult Find (");
                     sb.Append("[FromBody] ");
                     sb.Append(sTable);
+                    sb.Append("Model");
                     sb.Append(SPACE);
                     sb.Append(sTable.ToLower());
                     sb.Append(")");
@@ -3009,7 +3145,13 @@ namespace UtilCoding
                     sb.Append("o");
                     sb.Append(sTable);
                     sb.Append("Biz.Find(");
+                    sb.Append(sTable);
+                    sb.Append(".ToDictionary<");
+                    sb.Append(sTable);
+                    sb.Append("Model");
+                    sb.Append(">");
                     sb.Append(sTable.ToLower());
+                    sb.Append("Model");
                     sb.Append(");");
                     sb.AppendLine();
                     sb.Append(TAB);

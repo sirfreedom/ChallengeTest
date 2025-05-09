@@ -105,6 +105,8 @@ namespace UtilCoding
 
         private void CreateSP() 
         {
+            if (!chkStoreProcedure.Checked) { return; }
+
             SQLServerManager oSql;
             List<string> lTable = new List<string>();
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
@@ -114,6 +116,8 @@ namespace UtilCoding
 
         private void CreateDataLayerClass() 
         {
+            if (!chkDataLayer.Checked) { return; }
+
             SQLServerManager oSql;
             List<string> lTable = new List<string>();
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
@@ -123,6 +127,8 @@ namespace UtilCoding
 
         private void CreateBizLayerClass() 
         {
+            if (!chkBizLayer.Checked) { return; }
+
             SQLServerManager oSql;
             List<string> lTable = new List<string>();
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
@@ -132,11 +138,24 @@ namespace UtilCoding
 
         private void CreateClass() 
         {
+            if (!chkClass.Checked) { return; }
+
             SQLServerManager oSql;
             List<string> lTable = new List<string>();
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateClass(lTable, txtPathScript.Text, chkIncludePK.Checked , txtNamespace.Text,txtBaseClass.Text);
+        }
+
+        private void CreateModelClass() 
+        {
+            if (!chkModelClass.Checked) { return; }
+
+            SQLServerManager oSql;
+            List<string> lTable = new List<string>();
+            oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
+            lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
+            oSql.CreateClassModel(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseClass.Text);
         }
 
         private void CreateController() 
@@ -152,10 +171,11 @@ namespace UtilCoding
         {
             btnExport.Enabled = Habilitar;
             btnCreateSP.Enabled = Habilitar;
-            btnCreateClass.Enabled = Habilitar;
-            btnDataLayer.Enabled = Habilitar;
-            btnBizLayer.Enabled = Habilitar;
-            btnCreateController.Enabled = Habilitar;
+            chkClass.Enabled = Habilitar;
+            chkDataLayer.Enabled = Habilitar;
+            chkBizLayer.Enabled = Habilitar;
+            chkControllerLayer.Enabled = Habilitar;
+            chkModelClass.Enabled = Habilitar;
         }
 
         #endregion
@@ -329,6 +349,11 @@ namespace UtilCoding
                 }
                 ButtonEnabled(false);
                 CreateSP();
+                CreateClass();
+                CreateDataLayerClass();
+                CreateBizLayerClass();
+                CreateController();
+                CreateModelClass();
                 ButtonEnabled(true);
                 MessageBox.Show("Finalizo la exportacion de store procedures", "Procedures", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -363,7 +388,7 @@ namespace UtilCoding
                     throw new AppException("Verifique las tablas seleccionadas");
                 }
 
-                CreateClass();
+                
                 MessageBox.Show("Finalizo la exportacion de class con sus propiedades", "Classes", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (AppException ex)
@@ -398,26 +423,6 @@ namespace UtilCoding
         {
             SetConfiguration();
         }
-
-        private void btnDataLayer_Click(object sender, EventArgs e)
-        {
-            ButtonEnabled(false);
-            CreateDataLayerClass();
-            ButtonEnabled(true);
-        }
-
-        private void btnBizLayer_Click(object sender, EventArgs e)
-        {
-            ButtonEnabled(false);
-            CreateBizLayerClass();
-            ButtonEnabled(true);
-        }
-
-        private void btnCreateController_Click(object sender, EventArgs e)
-        {
-            ButtonEnabled(false);
-            CreateController();
-            ButtonEnabled(true);
-        }
+             
     }
 }
