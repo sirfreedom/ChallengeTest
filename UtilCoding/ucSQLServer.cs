@@ -56,7 +56,7 @@ namespace UtilCoding
             ConfigurationHelper.Instance.Save("UtilSqlServer.TopRows", txtTotalRegistros.Text);
             ConfigurationHelper.Instance.Save("UtilSqlServer.DecimalSeparatorDot", opPunto.Checked.ToString());
             ConfigurationHelper.Instance.Save("UtilSqlServer.Path", txtPathScript.Text);
-            ConfigurationHelper.Instance.Save("UtilSqlServer.Namespace", txtPathScript.Text);
+            ConfigurationHelper.Instance.Save("UtilSqlServer.Namespace", txtNamespace.Text);
             ConfigurationHelper.Instance.Save("UtilSqlServer.IntegratedSecurity", chkIntegratedSecurity.Checked.ToString());
         }
 
@@ -112,6 +112,7 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateSP(lTable,txtPathScript.Text,chkList.Checked,chkGet.Checked,chkFind.Checked,chkInsert.Checked,chkUpdate.Checked,chkDelete.Checked);
+            MessageBox.Show("Creacion de Sp exitosa");
         }
 
         private void CreateDataLayerClass() 
@@ -123,6 +124,7 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateDataLayerClass(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseClass.Text,chkList.Checked,chkGet.Checked,chkFind.Checked,chkInsert.Checked,chkUpdate.Checked,chkDelete.Checked);
+            MessageBox.Show("Creacion de Datalayer ");
         }
 
         private void CreateBizLayerClass() 
@@ -134,7 +136,9 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateBizLayerClass(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseClass.Text, chkList.Checked, chkGet.Checked, chkFind.Checked, chkInsert.Checked, chkUpdate.Checked, chkDelete.Checked);
+            MessageBox.Show("Creacion de BizLayer");
         }
+
 
         private void CreateClass() 
         {
@@ -145,6 +149,7 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateClass(lTable, txtPathScript.Text, chkIncludePK.Checked , txtNamespace.Text,txtBaseClass.Text);
+            MessageBox.Show("Creacion de Class");
         }
 
         private void CreateModelClass() 
@@ -156,6 +161,7 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateClassModel(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseClass.Text);
+            MessageBox.Show("Creacion de ModelClass");
         }
 
         private void CreateController() 
@@ -165,6 +171,7 @@ namespace UtilCoding
             oSql = new SQLServerManager(txtBase.Text, txtServer.Text, txtUser.Text, txtPassword.Text, chkIntegratedSecurity.Checked);
             lTable = gvTablesSQL.GetSeleccionados("chkSel", "TableName");
             oSql.CreateControllerClass(lTable, txtPathScript.Text, txtNamespace.Text, txtBaseController.Text, chkList.Checked, chkGet.Checked, chkFind.Checked, chkInsert.Checked, chkUpdate.Checked, chkDelete.Checked);
+            MessageBox.Show("Creacion de Controllers");
         }
 
         private void ButtonEnabled(bool Habilitar) 
@@ -176,6 +183,7 @@ namespace UtilCoding
             chkBizLayer.Enabled = Habilitar;
             chkControllerLayer.Enabled = Habilitar;
             chkModelClass.Enabled = Habilitar;
+            chkStoreProcedure.Enabled = Habilitar;
         }
 
         #endregion

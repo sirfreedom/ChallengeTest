@@ -947,7 +947,9 @@ namespace UtilCoding
                         if (i < lColumn.Count-1) 
                         {
                             sbColums.Append(",");
+                            sbColums.AppendLine();
                             sbParam.Append(",");
+                            sbParam.AppendLine();
                             sbColumAntiNull.Append(",");
                         }
                     }
@@ -1300,7 +1302,7 @@ namespace UtilCoding
                         isNeedNewLine = false;
                     }
 
-                    if (i % 3 == 0) 
+                    if (i % 6 == 0) 
                     {
                         sbColumsWithoutId.AppendLine();
                         sbInsert.AppendLine();
@@ -1323,7 +1325,7 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(sbColumAntiNull.ToString());
                     sb.AppendLine();
-                    sb.Append(" FROM ");
+                    sb.Append("FROM ");
                     sb.Append(sTable);
                     sb.Append(" ");
                     sb.Append(sCapitalLetter);
@@ -1630,7 +1632,6 @@ namespace UtilCoding
                 sbFile.Append(sTable);
                 sbFile.Append(".cs");
                 File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
-
             }
         }
 
@@ -1638,12 +1639,14 @@ namespace UtilCoding
         {
             PackTableInfo oPack = new PackTableInfo();
             StringBuilder sbNewPath = new StringBuilder();
+            StringBuilder sbFind = new StringBuilder();
             int TableId = 0;
 
             sbNewPath.Append(PathFile);
             sbNewPath.Append("Class_");
             sbNewPath.Append(DateTime.Now.Ticks.ToString());
             sbNewPath.Append(@"\");
+            sbFind.Append(sbFind.ToString());
 
             Directory.CreateDirectory(sbNewPath.ToString());
 
@@ -1775,8 +1778,15 @@ namespace UtilCoding
                 sbFile.Append(sTable);
                 sbFile.Append("Model");
                 sbFile.Append(".cs");
-                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
 
+                sbFind.Append(sbNewPath.ToString());
+                sbFind.Append(sTable);
+                sbFind.Append("Find");
+                sbFind.Append("Model");
+                sbFind.Append(".cs");
+
+                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
+                File.AppendAllText(sbFind.ToString(), sb.ToString(), Encoding.UTF8);
             }
         }
 
@@ -1799,11 +1809,23 @@ namespace UtilCoding
             {
                 StringBuilder sb = new StringBuilder();
                 StringBuilder sbTryCatch = new StringBuilder();
+                StringBuilder sbDeclaracion = new StringBuilder();
                 StringBuilder sbFile = new StringBuilder();
                 TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
                 TableId = oTableRelation.TableId;
                 List<TableColumn> lColumn = new List<TableColumn>();
                 lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
+
+                sbDeclaracion.AppendLine();
+                sbDeclaracion.Append(TAB);
+                sbDeclaracion.Append(TAB);
+                sbDeclaracion.Append("IRepository<");
+                sbDeclaracion.Append(sTable);
+                sbDeclaracion.Append("> ");
+                sbDeclaracion.Append(sTable);
+                sbDeclaracion.Append("Repository = new ContextSQL<");
+                sbDeclaracion.Append(sTable);
+                sbDeclaracion.Append(">(_ConnectionString);");
 
                 sbTryCatch.Append(TAB);
                 sbTryCatch.Append(TAB);
@@ -1893,14 +1915,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("IRepository<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append(sTable);
-                    sb.Append("Repository; ");
+                    sb.Append(sbDeclaracion.ToString());
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -1919,15 +1934,6 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append("Repository ");
-                    sb.Append(" = new ContextSQL<");
-                    sb.Append(sTable);
-                    sb.Append(">(_ConnectionString);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -1967,18 +1973,11 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
+                    sb.Append(sbDeclaracion.ToString());
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("List<dynamic> ldynamic;");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("IRepository<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append(sTable);
-                    sb.Append("Repository; ");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -1987,15 +1986,6 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append("Repository ");
-                    sb.Append("= new ContextSQL<");
-                    sb.Append(sTable);
-                    sb.Append(">(_ConnectionString);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2033,14 +2023,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("IRepository<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append(sTable);
-                    sb.Append("Repository;");
+                    sb.Append(sbDeclaracion.ToString());
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2057,14 +2040,6 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append("Repository = new ContextSQL<");
-                    sb.Append(sTable);
-                    sb.Append(">(_ConnectionString);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2108,14 +2083,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("IRepository<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append(sTable);
-                    sb.Append("Repository;");
+                    sb.Append(sbDeclaracion.ToString());
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2124,14 +2092,6 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append("Repository = new ContextSQL<");
-                    sb.Append(sTable);
-                    sb.Append(">(_ConnectionString);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2167,14 +2127,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("IRepository<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append(sTable);
-                    sb.Append("Repository;");
+                    sb.Append(sbDeclaracion.ToString());
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2184,15 +2137,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append("Repository = new ContextSQL<");
-                    sb.Append(sTable);
-                    sb.Append(">(_ConnectionString);");
-                    sb.AppendLine();
-                    sb.Append(TAB);
+                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(sTable);
@@ -2222,14 +2167,7 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("IRepository<");
-                    sb.Append(sTable);
-                    sb.Append("> ");
-                    sb.Append(sTable);
-                    sb.Append("Repository;");
+                    sb.Append(sbDeclaracion.ToString());
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2238,14 +2176,6 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append("Repository = new ContextSQL<");
-                    sb.Append(sTable);
-                    sb.Append(">(_ConnectionString);");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -2282,7 +2212,6 @@ namespace UtilCoding
                 sbFile.Append(".cs");
                 File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
             }
-            MessageBox.Show("Se creo la capa de datos correctamente ", "");
         }
 
         public void CreateBizLayerClass(List<string> Tables, string PathFile, string NameSpace = "", string BaseClass = "", bool List = false, bool Get = false, bool Find = false, bool Insert = false, bool Update = false, bool Delete = false)
@@ -2718,8 +2647,6 @@ namespace UtilCoding
                 sbFile.Append(".cs");
                 File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
             }
-            MessageBox.Show("Se creo la capa de Biz correctamente ", "");
-
         }
 
         public void CreateControllerClass(List<string> Tables, string PathFile, string NameSpace = "", string BaseClass = "", bool List = false, bool Get = false, bool Find = false, bool Insert = false, bool Update = false, bool Delete = false)
@@ -3062,7 +2989,7 @@ namespace UtilCoding
                     sb.Append("/// <param name=");
                     sb.Append(COMILLADOBLE);
                     sb.Append(sTable.ToLower());
-                    sb.Append("Model");
+                    sb.Append("FindModel");
                     sb.Append(COMILLADOBLE);
                     sb.Append(">");
                     sb.AppendLine();
@@ -3074,7 +3001,11 @@ namespace UtilCoding
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("/// ");
-                    sb.Append("Los valores que son filtrables son de tipo string, ");
+                    sb.Append("Los valores que son filtrables son de tipo string. ");
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("/// ESTE METODO NO SE PUEDE PROBAR CON SWAGGER, intente probarlo con Postman u otro programa");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3091,7 +3022,7 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// o bien crear una entidad que sea exactamente igual a los valores que desea devolver y convertir la lista dinamica por lista de DTOs");
+                    sb.Append("/// Esta lista dinamica, es convertible tranquilamente a un Model");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3115,9 +3046,10 @@ namespace UtilCoding
                     sb.Append("public ActionResult Find (");
                     sb.Append("[FromBody] ");
                     sb.Append(sTable);
-                    sb.Append("Model");
+                    sb.Append("FindModel");
                     sb.Append(SPACE);
                     sb.Append(sTable.ToLower());
+                    sb.Append("FindModel");
                     sb.Append(")");
                     sb.AppendLine();
                     sb.Append(TAB);
@@ -3425,6 +3357,7 @@ namespace UtilCoding
                     sb.Append("/// <param name=");
                     sb.Append(COMILLADOBLE);
                     sb.Append(sTable.ToLower());
+                    sb.Append("Model");
                     sb.Append(COMILLADOBLE);
                     sb.Append(">");
                     sb.AppendLine();
@@ -3445,7 +3378,7 @@ namespace UtilCoding
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// devuelve un status: 201 si inserto correctamente ");
+                    sb.Append("/// devuelve un status: 201/204 si inserto correctamente ");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3503,7 +3436,7 @@ namespace UtilCoding
                     sb.Append(sbTryCatch.ToString());
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("return Created(); //OK 201");
+                    sb.Append("return Created(); //OK 201/204");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
@@ -3632,23 +3565,7 @@ namespace UtilCoding
                 sbFile.Append(".cs");
                 File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
             }
-            MessageBox.Show("Se creo la capa de Controller correctamente ", "");
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }
