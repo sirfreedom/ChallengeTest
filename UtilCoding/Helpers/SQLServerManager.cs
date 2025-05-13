@@ -1667,7 +1667,7 @@ namespace UtilCoding
                 {
                     sb.Append("namespace ");
                     sb.Append(NameSpace);
-                    sb.Append(".Entity");
+                    sb.Append(".Model");
                     sb.AppendLine();
                     sb.Append("{");
                     sb.AppendLine();
@@ -1676,12 +1676,7 @@ namespace UtilCoding
                 sb.Append(TAB);
                 sb.Append("public class ");
                 sb.Append(sTable);
-
-                if (BaseClass.Length > 0)
-                {
-                    sb.Append(" : ");
-                    sb.Append(BaseClass);
-                }
+                sb.Append("######");
 
                 sb.AppendLine();
                 sb.Append(TAB);
@@ -1785,8 +1780,8 @@ namespace UtilCoding
                 sbFind.Append("Model");
                 sbFind.Append(".cs");
 
-                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
-                File.AppendAllText(sbFind.ToString(), sb.ToString(), Encoding.UTF8);
+                File.AppendAllText(sbFile.ToString(), sb.ToString().Replace("######","Model"), Encoding.UTF8);
+                File.AppendAllText(sbFind.ToString(), sb.ToString().Replace("######","FindModel"), Encoding.UTF8);
             }
         }
 
