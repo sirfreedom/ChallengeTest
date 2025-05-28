@@ -13,6 +13,35 @@ namespace UtilCoding
     public class ApiTestHelper
     {
 
+        public static async Task<string> PostToApiAsync(string url, string Token, string jsonContent, string HeaderBearer = "Bearer")
+        {
+            HttpClient _httpClient;
+            _httpClient = new HttpClient();
+
+            // Crear el contenido de la solicitud con tipo application/json
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            // Crear la solicitud HTTP
+            var request = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = content
+            };
+
+            // Añadir el header personalizado
+            request.Headers.Add(HeaderBearer, Token);
+
+            // Enviar la solicitud y obtener la respuesta
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+            // Asegurar que la respuesta fue exitosa
+            response.EnsureSuccessStatusCode();
+
+            // Leer y devolver el contenido de la respuesta como string
+            string responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
+        }
+
+
         public static async Task GetItemsAsync(string Url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;

@@ -320,11 +320,11 @@ namespace UtilCoding.Helpers
                         lLines = File.ReadAllLines(lFiles[i], Encoding.UTF8);
 
                         //its Exists, 
-                        if (lLines.Where(x => x.Trim().Contains(OldText)).ToList().Count() == 1)
+                        if (lLines.Where(x => x.Trim().Contains(OldText.ToLower())).ToList().Count() == 1)
                         {
                             //i get index of the code line.
                             int indice = lLines.Select((line, index) => new { Line = line, Index = index })
-                           .Where(x => x.Line.ToLower().Contains(OldText)).Select(x => x.Index).FirstOrDefault();
+                           .Where(x => x.Line.ToLower().Contains(OldText.ToLower())).Select(x => x.Index).FirstOrDefault();
 
                             //i replance old code to new code.
                             lLines[indice] = lLines[indice].Replace(OldText,NewText);

@@ -12,6 +12,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Windows;
 
@@ -74,7 +75,7 @@ namespace UtilCoding
         private string ConectionStringManagerSql(string BaseName, string ServerName, string User, string Pass, bool IntegrateSegurity)
         {
             StringBuilder sb = new StringBuilder();
-                        
+
             if (User.Length != 0 && Pass.Length != 0)
             {
                 sb.Append("Password=");
@@ -117,7 +118,7 @@ namespace UtilCoding
                 da.SelectCommand = cmd;
                 cmd.CommandText = sbConsultas.ToString();
 
-                using (SqlConnection connection = new SqlConnection()) 
+                using (SqlConnection connection = new SqlConnection())
                 {
                     connection.ConnectionString = this.DbConectionString;
                     cmd.CommandType = CommandType.Text;
@@ -229,7 +230,7 @@ namespace UtilCoding
                 da.SelectCommand = cmd;
                 cmd.CommandText = sbConsultas.ToString();
 
-                using (SqlConnection connection = new SqlConnection()) 
+                using (SqlConnection connection = new SqlConnection())
                 {
                     connection.ConnectionString = this.DbConectionString;
                     cmd.Connection = connection;
@@ -792,7 +793,7 @@ namespace UtilCoding
             public List<TableConstrainRelation> TableConstrainRelations { get; set; } = new List<TableConstrainRelation>();
         }
 
-        
+
         public class TableRelation
         {
             public int TableId { get; set; }
@@ -800,7 +801,7 @@ namespace UtilCoding
             public int Relation { get; set; }
         }
 
-        public class TableColumn 
+        public class TableColumn
         {
             public int TableId { get; set; }
             public string ColumnName { get; set; }
@@ -810,15 +811,15 @@ namespace UtilCoding
             public bool AllowNull { get; set; }
         }
 
-        public class TableConstrainRelation 
+        public class TableConstrainRelation
         {
-            public int TableId { get; set;}
+            public int TableId { get; set; }
             public int ObjectId { get; set; }
             public int TableForeingId { get; set; }
             public string TypeDescription { get; set; }
             public string TableName { get; set; }
             public string ColumnName { get; set; }
-            public string  ReferenceTableName { get; set; }
+            public string ReferenceTableName { get; set; }
             public string ReferenceColumnName { get; set; }
         }
 
@@ -840,7 +841,7 @@ namespace UtilCoding
 
         #endregion
 
-        public void CreateSP(List<string> Tables, string PathFile, bool List, bool Get = false, bool Find = false, bool Insert = false, bool Update = false, bool Delete = false) 
+        public void CreateSP(List<string> Tables, string PathFile, bool List, bool Get = false, bool Find = false, bool Insert = false, bool Update = false, bool Delete = false)
         {
             StringBuilder sb = new StringBuilder();
             StringBuilder sbPreHeader = new StringBuilder();
@@ -878,10 +879,10 @@ namespace UtilCoding
             sbFooter.AppendLine("RAISERROR(@MsgError, 16, 1);");
             sbFooter.AppendLine("END CATCH;");
             sbFooter.AppendLine("END");
-            
+
             oPack = GetTablesInfo(Tables);
 
-            foreach (string sTable in Tables) 
+            foreach (string sTable in Tables)
             {
                 int TableId = 0;
                 string sColumPK = string.Empty;
@@ -919,10 +920,10 @@ namespace UtilCoding
                                 select new { p.ColumnName, p.ColumType };
                 iColumnWhereTotalFind = resultado.Distinct().ToList().Count();
 
-                for (int i=0;i<lColumn.Count;i++)
+                for (int i = 0; i < lColumn.Count; i++)
                 {
-                       
-                    if (lColumn[i].ColumnName == lColumn[i].NameColumnPK) 
+
+                    if (lColumn[i].ColumnName == lColumn[i].NameColumnPK)
                     {
                         sbColums.Append(sCapitalLetter);
                         sbColums.Append(".");
@@ -943,8 +944,8 @@ namespace UtilCoding
 
                         sColumPK = lColumn[i].ColumnName;
                         sTypeColumPk = lColumn[i].ColumType;
-                        
-                        if (i < lColumn.Count-1) 
+
+                        if (i < lColumn.Count - 1)
                         {
                             sbColums.Append(",");
                             sbColums.AppendLine();
@@ -1028,10 +1029,13 @@ namespace UtilCoding
                                 sbParamInsertWithoutId.Append(lColumn[i].ColumnLen);
                                 sbParamInsertWithoutId.Append(")");
 
-                                sbParamFindWithoutId.Append("(");
-                                sbParamFindWithoutId.Append(lColumn[i].ColumnLen);
-                                sbParamFindWithoutId.Append(")");
-                                sbParamFindWithoutId.AppendLine();
+                                if (lColumn[i].ColumType != "ntext")
+                                {
+                                    sbParamFindWithoutId.Append("(");
+                                    sbParamFindWithoutId.Append(lColumn[i].ColumnLen);
+                                    sbParamFindWithoutId.Append(")");
+                                    sbParamFindWithoutId.AppendLine();
+                                }
 
                                 sbParam.Append("(");
                                 sbParam.Append(lColumn[i].ColumnLen);
@@ -1064,14 +1068,14 @@ namespace UtilCoding
                                 if (lColumn[i].AllowNull)
                                 {
                                     sbFindWhere.Append("ISNULL(");
-                                } 
+                                }
 
                                 sbFindWhere.Append(sCapitalLetter);
                                 sbFindWhere.Append(".");
                                 sbFindWhere.Append("[");
                                 sbFindWhere.Append(lColumn[i].ColumnName);
                                 sbFindWhere.Append("] ");
-                                
+
                                 if (lColumn[i].AllowNull)
                                 {
                                     sbFindWhere.Append(",'') ");
@@ -1119,7 +1123,7 @@ namespace UtilCoding
                                 }
 
                                 break;
-                            case "bigint":  
+                            case "bigint":
                             case "smallint":
                             case "int":
                             case "tinyint":
@@ -1272,7 +1276,7 @@ namespace UtilCoding
                                 break;
                         }
 
-                        if (i < lColumn.Count -1 )
+                        if (i < lColumn.Count - 1)
                         {
                             sbColums.Append(",");
                             sbColumAntiNull.Append(",");
@@ -1302,7 +1306,7 @@ namespace UtilCoding
                         isNeedNewLine = false;
                     }
 
-                    if (i % 6 == 0) 
+                    if (i % 6 == 0)
                     {
                         sbColumsWithoutId.AppendLine();
                         sbInsert.AppendLine();
@@ -1312,10 +1316,10 @@ namespace UtilCoding
                 sbFindWhere.AppendLine();
                 sbFindWhere.Append(") ");
 
-               if (List) 
+                if (List)
                 {
                     sb.Append(sbPreHeader.ToString());
-                    
+
                     sb.Append("CREATE PROCEDURE [dbo].[");
                     sb.Append(sTable);
                     sb.Append("_List]");
@@ -1373,7 +1377,7 @@ namespace UtilCoding
                     sb.AppendLine();
                 }
 
-                if (Find && iColumnWhereTotalFind > 0) 
+                if (Find && iColumnWhereTotalFind > 0)
                 {
                     sb.Append(sbPreHeader.ToString());
                     sb.Append("CREATE PROCEDURE [dbo].[");
@@ -1423,7 +1427,7 @@ namespace UtilCoding
                     sb.AppendLine();
                 }
 
-                if (Update) 
+                if (Update)
                 {
                     sb.Append(sbPreHeader.ToString());
                     sb.Append("CREATE PROCEDURE [dbo].[");
@@ -1451,7 +1455,7 @@ namespace UtilCoding
                     sb.AppendLine();
                 }
 
-                if (Delete) 
+                if (Delete)
                 {
                     sb.Append(sbPreHeader.ToString());
 
@@ -1491,7 +1495,7 @@ namespace UtilCoding
             File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
         }
 
-        public void CreateClass(List<string> Tables, string PathFile, bool IncludePK , string NameSpace = "", string BaseClass = "")
+        public void CreateClass(List<string> Tables, string PathFile, bool IncludePK, string NameSpace = "", string BaseClass = "")
         {
             PackTableInfo oPack = new PackTableInfo();
             StringBuilder sbNewPath = new StringBuilder();
@@ -1503,7 +1507,7 @@ namespace UtilCoding
             sbNewPath.Append(@"\");
 
             Directory.CreateDirectory(sbNewPath.ToString());
-            
+
             oPack = GetTablesInfo(Tables);
 
             foreach (string sTable in Tables)
@@ -1517,7 +1521,7 @@ namespace UtilCoding
 
                 sb.AppendLine();
 
-                if (NameSpace.Length > 3) 
+                if (NameSpace.Length > 3)
                 {
                     sb.Append("namespace ");
                     sb.Append(NameSpace);
@@ -1531,7 +1535,7 @@ namespace UtilCoding
                 sb.Append("public class ");
                 sb.Append(sTable);
 
-                if (BaseClass.Length > 0) 
+                if (BaseClass.Length > 0)
                 {
                     sb.Append(" : ");
                     sb.Append(BaseClass);
@@ -1546,148 +1550,7 @@ namespace UtilCoding
                 {
                     bool IsValidNull = false;
 
-                    if (oTableColum.NameColumnPK == oTableColum.ColumnName && IncludePK == false ) 
-                    {
-                        continue;
-                    }
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("public ");
-
-                    switch (oTableColum.ColumType) 
-                    {
-                        case "nvarchar":
-                        case "ntext":
-                        case "varchar":
-                        case "text":
-                        case "char":
-                        case "xml":
-                            sb.Append("string");
-                            break;
-                        case "bigint":
-                        case "smallint":
-                        case "int":
-                        case "tinyint":
-                            IsValidNull = true;
-                            sb.Append("int");
-                            break;
-                        case "decimal":
-                        case "smallmoney":
-                        case "money":
-                        case "numeric":
-                        case "float":
-                        case "geography":
-                        case "geometry":
-                        case "real":
-                            IsValidNull = true;
-                            sb.Append("decimal");
-                            break;
-                        case "bit":
-                            IsValidNull = true;
-                            sb.Append("bool");
-                            break;
-                        case "date":
-                        case "datetimeoffset":
-                        case "datetime2":
-                        case "smalldatetime":
-                        case "datetime":
-                        case "time":
-                            IsValidNull = true;
-                            sb.Append("System.DateTime");
-                            break;
-                        case "binary":
-                        case "varbinary":
-                        case "image":
-                            sb.Append("byte[]");
-                            break;
-                        default:
-                            sb.Append("object");
-                        break;
-                    }
-
-                    if (oTableColum.AllowNull && IsValidNull) 
-                    {
-                        sb.Append("?");
-                    }
-
-                    sb.Append(SPACE);
-                    sb.Append(oTableColum.ColumnName);
-                    sb.Append(SPACE);
-                    sb.Append("{ get; set; }");
-                    sb.AppendLine();
-                }
-
-                sb.Append(TAB);
-                sb.Append("}");
-                sb.AppendLine();
-
-                if (NameSpace.Length > 3)
-                {
-                    sb.AppendLine();
-                    sb.Append("}");
-                }
-
-                sbFile.Append(sbNewPath.ToString());
-                sbFile.Append(sTable);
-                sbFile.Append(".cs");
-                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
-            }
-        }
-
-        public void CreateClassModel(List<string> Tables, string PathFile, string NameSpace = "", string BaseClass = "")
-        {
-            PackTableInfo oPack = new PackTableInfo();
-            StringBuilder sbNewPath = new StringBuilder();
-            StringBuilder sbFind = new StringBuilder();
-            int TableId = 0;
-
-            sbNewPath.Append(PathFile);
-            sbNewPath.Append("Class_");
-            sbNewPath.Append(DateTime.Now.Ticks.ToString());
-            sbNewPath.Append(@"\");
-            sbFind.Append(sbFind.ToString());
-
-            Directory.CreateDirectory(sbNewPath.ToString());
-
-            oPack = GetTablesInfo(Tables);
-
-            foreach (string sTable in Tables)
-            {
-                StringBuilder sb = new StringBuilder();
-                StringBuilder sbFile = new StringBuilder();
-                TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
-                TableId = oTableRelation.TableId;
-                List<TableColumn> lColumn = new List<TableColumn>();
-                lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
-
-                sb.AppendLine();
-
-                if (NameSpace.Length > 3)
-                {
-                    sb.Append("namespace ");
-                    sb.Append(NameSpace);
-                    sb.Append(".Model");
-                    sb.AppendLine();
-                    sb.Append("{");
-                    sb.AppendLine();
-                }
-
-                sb.Append(TAB);
-                sb.Append("public class ");
-                sb.Append(sTable);
-                sb.Append("######");
-
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append("{");
-                sb.AppendLine();
-
-                foreach (TableColumn oTableColum in lColumn)
-                {
-                    bool IsValidNull = false;
-
-                    if (oTableColum.NameColumnPK == oTableColum.ColumnName)
+                    if (oTableColum.NameColumnPK == oTableColum.ColumnName && IncludePK == false)
                     {
                         continue;
                     }
@@ -1771,17 +1634,165 @@ namespace UtilCoding
 
                 sbFile.Append(sbNewPath.ToString());
                 sbFile.Append(sTable);
-                sbFile.Append("Model");
                 sbFile.Append(".cs");
+                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
+            }
+        }
 
-                sbFind.Append(sbNewPath.ToString());
-                sbFind.Append(sTable);
-                sbFind.Append("Find");
-                sbFind.Append("Model");
-                sbFind.Append(".cs");
+        public void CreateClassModel(List<string> Tables, string PathFile, string NameSpace = "", string BaseClass = "")
+        {
+            PackTableInfo oPack = new PackTableInfo();
+            StringBuilder sbInitPath = new StringBuilder();
+            StringBuilder sbFind = new StringBuilder();
+            int TableId = 0;
 
-                File.AppendAllText(sbFile.ToString(), sb.ToString().Replace("######","Model"), Encoding.UTF8);
-                File.AppendAllText(sbFind.ToString(), sb.ToString().Replace("######","FindModel"), Encoding.UTF8);
+            sbInitPath.Append(PathFile);
+            sbInitPath.Append("ClassModel_");
+            sbInitPath.Append(DateTime.Now.Ticks.ToString());
+            sbInitPath.Append(@"\");
+            try
+            {
+                Directory.CreateDirectory(sbInitPath.ToString());
+
+                oPack = GetTablesInfo(Tables);
+
+                foreach (string sTable in Tables)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sbFile = new StringBuilder();
+                    TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
+                    TableId = oTableRelation.TableId;
+                    List<TableColumn> lColumn = new List<TableColumn>();
+                    lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
+
+                    sb.AppendLine();
+
+                    if (NameSpace.Length > 3)
+                    {
+                        sb.Append("namespace ");
+                        sb.Append(NameSpace);
+                        sb.Append(".Model");
+                        sb.AppendLine();
+                        sb.Append("{");
+                        sb.AppendLine();
+                    }
+
+                    sb.Append(TAB);
+                    sb.Append("public class ");
+                    sb.Append(sTable);
+                    sb.Append("######");
+
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append("{");
+                    sb.AppendLine();
+
+                    foreach (TableColumn oTableColum in lColumn)
+                    {
+                        bool IsValidNull = false;
+
+                        if (oTableColum.NameColumnPK == oTableColum.ColumnName)
+                        {
+                            continue;
+                        }
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ");
+
+                        switch (oTableColum.ColumType)
+                        {
+                            case "nvarchar":
+                            case "ntext":
+                            case "varchar":
+                            case "text":
+                            case "char":
+                            case "xml":
+                                sb.Append("string");
+                                break;
+                            case "bigint":
+                            case "smallint":
+                            case "int":
+                            case "tinyint":
+                                IsValidNull = true;
+                                sb.Append("int");
+                                break;
+                            case "decimal":
+                            case "smallmoney":
+                            case "money":
+                            case "numeric":
+                            case "float":
+                            case "geography":
+                            case "geometry":
+                            case "real":
+                                IsValidNull = true;
+                                sb.Append("decimal");
+                                break;
+                            case "bit":
+                                IsValidNull = true;
+                                sb.Append("bool");
+                                break;
+                            case "date":
+                            case "datetimeoffset":
+                            case "datetime2":
+                            case "smalldatetime":
+                            case "datetime":
+                            case "time":
+                                IsValidNull = true;
+                                sb.Append("System.DateTime");
+                                break;
+                            case "binary":
+                            case "varbinary":
+                            case "image":
+                                sb.Append("byte[]");
+                                break;
+                            default:
+                                sb.Append("object");
+                                break;
+                        }
+
+                        if (oTableColum.AllowNull && IsValidNull)
+                        {
+                            sb.Append("?");
+                        }
+
+                        sb.Append(SPACE);
+                        sb.Append(oTableColum.ColumnName);
+                        sb.Append(SPACE);
+                        sb.Append("{ get; set; }");
+                        sb.AppendLine();
+                    }
+
+                    sb.Append(TAB);
+                    sb.Append("}");
+                    sb.AppendLine();
+
+                    if (NameSpace.Length > 3)
+                    {
+                        sb.AppendLine();
+                        sb.Append("}");
+                    }
+
+                    sbFile.Append(sbInitPath.ToString());
+                    sbFile.Append(sTable);
+                    sbFile.Append("Model");
+                    sbFile.Append(".cs");
+
+                    sbFind.Append(sbInitPath.ToString());
+                    sbFind.Append(sTable);
+                    sbFind.Append("Find");
+                    sbFind.Append("Model");
+                    sbFind.Append(".cs");
+
+                    File.AppendAllText(sbFile.ToString(), sb.ToString().Replace("######", "Model"), Encoding.UTF8);
+                    File.AppendAllText(sbFind.ToString(), sb.ToString().Replace("######", "FindModel"), Encoding.UTF8);
+                    sbFile.Clear();
+                    sbFind.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -2656,911 +2667,958 @@ namespace UtilCoding
             sbNewPath.Append("ControllerClass_");
             sbNewPath.Append(DateTime.Now.Ticks.ToString());
             sbNewPath.Append(@"\");
-
-            Directory.CreateDirectory(sbNewPath.ToString());
-
-            oPack = GetTablesInfo(Tables);
-
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("catch (WebException ex) ");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("{");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("_logger.LogError(ex.Message, ex.InnerException, ex.StackTrace);");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("return ValidationProblem(");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append("Error");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append(", ");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append("Get");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append(", 500, ex.Message);");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("}");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("catch (Exception ex)");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("{");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("_logger.LogError(ex.Message, ex.InnerException, ex.StackTrace);");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("return ValidationProblem(");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append("Error");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append(", ");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append("Get ");
-            sbTryCatch.Append(COMILLADOBLE);
-            sbTryCatch.Append(", 500, ex.Message);");
-            sbTryCatch.AppendLine();
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append(TAB);
-            sbTryCatch.Append("}");
-            sbTryCatch.AppendLine();
-
-
-            foreach (string sTable in Tables)
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                StringBuilder sbDeclaracionBiz = new StringBuilder();
-                StringBuilder sbFile = new StringBuilder();
-                TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
-                TableId = oTableRelation.TableId;
-                List<TableColumn> lColumn = new List<TableColumn>();
 
-                lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
+                Directory.CreateDirectory(sbNewPath.ToString());
 
-                sbDeclaracionBiz.Append(TAB);
-                sbDeclaracionBiz.Append(TAB);
-                sbDeclaracionBiz.Append(sTable);
-                sbDeclaracionBiz.Append("Biz ");
-                sbDeclaracionBiz.Append("o");
-                sbDeclaracionBiz.Append(sTable);
-                sbDeclaracionBiz.Append("Biz");
-                sbDeclaracionBiz.Append(" = new ");
-                sbDeclaracionBiz.Append(sTable);
-                sbDeclaracionBiz.Append("Biz(_ConectionString); ");
-                sbDeclaracionBiz.AppendLine();
+                oPack = GetTablesInfo(Tables);
+
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("catch (WebException ex) ");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("{");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("_logger.LogError(ex.Message, ex.InnerException, ex.StackTrace);");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("return ValidationProblem(");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Error");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", ");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Get");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", 500, ex.Message);");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("}");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("catch (Exception ex)");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("{");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("_logger.LogError(ex.Message, ex.InnerException, ex.StackTrace);");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("return ValidationProblem(");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Error");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", ");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append("Get ");
+                sbTryCatch.Append(COMILLADOBLE);
+                sbTryCatch.Append(", 500, ex.Message);");
+                sbTryCatch.AppendLine();
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append(TAB);
+                sbTryCatch.Append("}");
+                sbTryCatch.AppendLine();
 
 
-                sb.Append("using System.Collections.Generic;");
-                sb.AppendLine();
-                sb.Append("using Microsoft.AspNetCore.Authorization;");
-                sb.AppendLine();
-                sb.Append("using Microsoft.AspNetCore.Mvc;");
-                sb.AppendLine();
-                sb.Append("using System.Net;");
-                sb.AppendLine();
-                sb.Append("using Microsoft.Extensions.Configuration;");
-                sb.AppendLine();
-                sb.Append("using Microsoft.Extensions.Logging;");
-                sb.AppendLine();
-                sb.Append("using System;");
-
-                sb.AppendLine();
-                sb.Append("using ");
-                sb.Append(NameSpace);
-                sb.Append(".Entity;");
-
-                sb.AppendLine();
-                sb.Append("using ");
-                sb.Append(NameSpace);
-                sb.Append(".Biz;");
-                sb.AppendLine();
-
-                if (NameSpace.Length > 3)
+                foreach (string sTable in Tables)
                 {
+                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sbDeclaracionBiz = new StringBuilder();
+                    StringBuilder sbFile = new StringBuilder();
+                    TableRelation oTableRelation = oPack.TableRelations.FirstOrDefault(x => x.TableName == sTable);
+                    TableId = oTableRelation.TableId;
+                    List<TableColumn> lColumn = new List<TableColumn>();
+
+                    lColumn = oPack.TableColumns.Where(x => x.TableId == TableId).ToList();
+
+                    sbDeclaracionBiz.Append(TAB);
+                    sbDeclaracionBiz.Append(TAB);
+                    sbDeclaracionBiz.Append(sTable);
+                    sbDeclaracionBiz.Append("Biz ");
+                    sbDeclaracionBiz.Append("o");
+                    sbDeclaracionBiz.Append(sTable);
+                    sbDeclaracionBiz.Append("Biz");
+                    sbDeclaracionBiz.Append(" = new ");
+                    sbDeclaracionBiz.Append(sTable);
+                    sbDeclaracionBiz.Append("Biz(_ConectionString); ");
+                    sbDeclaracionBiz.AppendLine();
+
+
+                    sb.Append("using System.Collections.Generic;");
                     sb.AppendLine();
-                    sb.Append("namespace ");
+                    sb.Append("using Microsoft.AspNetCore.Authorization;");
+                    sb.AppendLine();
+                    sb.Append("using Microsoft.AspNetCore.Mvc;");
+                    sb.AppendLine();
+                    sb.Append("using System.Net;");
+                    sb.AppendLine();
+                    sb.Append("using Microsoft.Extensions.Configuration;");
+                    sb.AppendLine();
+                    sb.Append("using Microsoft.Extensions.Logging;");
+                    sb.AppendLine();
+                    sb.Append("using System;");
+
+                    sb.AppendLine();
+                    sb.Append("using ");
                     sb.Append(NameSpace);
-                    sb.Append(".Controllers");
+                    sb.Append(".Entity;");
+
                     sb.AppendLine();
-                    sb.Append("{");
+                    sb.Append("using ");
+                    sb.Append(NameSpace);
+                    sb.Append(".Biz;");
                     sb.AppendLine();
-                }
 
-                sb.Append(TAB);
-                sb.Append("[ApiController]");
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append("[Route(");
-                sb.Append(COMILLADOBLE);
-                sb.Append("api/[controller]");
-                sb.Append(COMILLADOBLE);
-                sb.Append(")]");
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append("public class ");
-                sb.Append(sTable);
-                sb.Append("Controller");
-                sb.Append(" : Controller ");
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append("{");
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("private readonly ILogger<");
-                sb.Append(sTable);
-                sb.Append("Controller");
-                sb.Append("> _logger;");
-                sb.AppendLine();
+                    sb.AppendLine();
+                    sb.Append("using ");
+                    sb.Append(NameSpace);
+                    sb.Append(".Model;");
+                    sb.AppendLine();
 
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("private readonly IConfiguration _configuration;");
-                sb.AppendLine();
+                    if (NameSpace.Length > 3)
+                    {
+                        sb.AppendLine();
+                        sb.Append("namespace ");
+                        sb.Append(NameSpace);
+                        sb.Append(".Controllers");
+                        sb.AppendLine();
+                        sb.Append("{");
+                        sb.AppendLine();
+                    }
 
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("private readonly string _ConectionString;");
-                sb.AppendLine();
-
-                sb.AppendLine();
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("public ");
-                sb.Append(sTable);
-                sb.Append("Controller(ILogger<");
-                sb.Append(sTable);
-                sb.Append("Controller");
-                sb.Append("> logger, IConfiguration configuration)");
-                sb.AppendLine();
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("{");
-                sb.AppendLine();
-
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("_logger = logger;");
-                sb.AppendLine();
-
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("_configuration = configuration;");
-                sb.AppendLine();
-
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("_ConectionString = _configuration.GetConnectionString(");
-                sb.Append(COMILLADOBLE);
-                sb.Append("DefaultConnection");
-                sb.Append(COMILLADOBLE);
-                sb.Append(");");
-                sb.AppendLine();
-
-                sb.Append(TAB);
-                sb.Append(TAB);
-                sb.Append("}");
-                sb.AppendLine();
-                sb.AppendLine();
-
-                if (List)
-                {
                     sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <summary>");
+                    sb.Append("[ApiController]");
                     sb.AppendLine();
                     sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Lista ");
-                    sb.Append(sTable);
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// devuelve la lista de ");
-                    sb.Append(sTable);
-                    sb.Append(". generalmente usado para combos y lugares donde no necesitarias un filtro");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpGet(");
+                    sb.Append("[Route(");
                     sb.Append(COMILLADOBLE);
-                    sb.Append("List");
+                    sb.Append("api/[controller]");
                     sb.Append(COMILLADOBLE);
                     sb.Append(")]");
                     sb.AppendLine();
                     sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[AllowAnonymous]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("public ActionResult List()");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(sbDeclaracionBiz.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("List<");
+                    sb.Append("public class ");
                     sb.Append(sTable);
-                    sb.Append("> l");
-                    sb.Append(sTable);
-                    sb.Append(";");
+                    sb.Append("Controller");
+                    sb.Append(" : Controller ");
                     sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("try ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("l");
+                    sb.Append("private readonly ILogger<");
                     sb.Append(sTable);
-                    sb.Append(" = ");
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append("Biz.List();");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.Append(sbTryCatch.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("return Ok(new {  ");
-                    sb.Append("list");
-                    sb.Append(sTable.ToLower() );
-                    sb.Append(" = ");
-                    sb.Append("l");
-                    sb.Append(sTable);
-                    sb.Append(" }); //OK 200);");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.AppendLine();
-                    sb.AppendLine();
-                }
-
-                if (Find)
-                {
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Busca un ");
-                    sb.Append(sTable);
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <param name=");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append("FindModel");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(">");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("Esta entidad permite filtrar de manera sensilla por todos los campos que contiene");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("Los valores que son filtrables son de tipo string. ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ESTE METODO NO SE PUEDE PROBAR CON SWAGGER, intente probarlo con Postman u otro programa");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </param>");
+                    sb.Append("Controller");
+                    sb.Append("> _logger;");
                     sb.AppendLine();
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("/// <returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// devuelve una lista dinamica de los valores obtenidos en la base de datos, puede alterar los valores sin problemas");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Esta lista dinamica, es convertible tranquilamente a un Model");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpGet(");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Find");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(")]");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[AllowAnonymous]");
+                    sb.Append("private readonly IConfiguration _configuration;");
                     sb.AppendLine();
 
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("public ActionResult Find (");
-                    sb.Append("[FromBody] ");
+                    sb.Append("private readonly string _ConectionString;");
+                    sb.AppendLine();
+
+                    sb.AppendLine();
+                    sb.AppendLine();
+                    sb.Append(TAB);
+                    sb.Append(TAB);
+                    sb.Append("public ");
                     sb.Append(sTable);
-                    sb.Append("FindModel");
-                    sb.Append(SPACE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append("FindModel");
-                    sb.Append(")");
+                    sb.Append("Controller(ILogger<");
+                    sb.Append(sTable);
+                    sb.Append("Controller");
+                    sb.Append("> logger, IConfiguration configuration)");
                     sb.AppendLine();
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("{");
                     sb.AppendLine();
-                    sb.Append(sbDeclaracionBiz.ToString());
+
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("List<dynamic> ldynamic;");
+                    sb.Append(TAB);
+                    sb.Append("_logger = logger;");
                     sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("try");
+                    sb.Append(TAB);
+                    sb.Append("_configuration = configuration;");
                     sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append(TAB);
-                    sb.Append("ldynamic");
-                    sb.Append(" = ");
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append("Biz.Find(");
-                    sb.Append(sTable);
-                    sb.Append(".ToDictionary<");
-                    sb.Append(sTable);
-                    sb.Append("Model");
-                    sb.Append(">");
-                    sb.Append(sTable.ToLower());
-                    sb.Append("Model");
+                    sb.Append("_ConectionString = _configuration.GetConnectionString(");
+                    sb.Append(COMILLADOBLE);
+                    sb.Append("DefaultConnection");
+                    sb.Append(COMILLADOBLE);
                     sb.Append(");");
                     sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.Append(sbTryCatch.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("return Ok(new {  list");
-                    sb.Append(sTable.ToLower());
-                    sb.Append(" = ldynamic");
-                    sb.Append("}); //OK 200);"); 
-                    sb.AppendLine();
+
                     sb.Append(TAB);
                     sb.Append(TAB);
                     sb.Append("}");
                     sb.AppendLine();
                     sb.AppendLine();
+
+                    if (List)
+                    {
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Lista ");
+                        sb.Append(sTable);
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// devuelve la lista de ");
+                        sb.Append(sTable);
+                        sb.Append(". generalmente usado para combos y lugares donde no necesitarias un filtro");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[HttpGet(");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("List");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(")]");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[AllowAnonymous]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ActionResult List()");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(sbDeclaracionBiz.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("List<");
+                        sb.Append(sTable);
+                        sb.Append("> l");
+                        sb.Append(sTable);
+                        sb.Append(";");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("try ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("l");
+                        sb.Append(sTable);
+                        sb.Append(" = ");
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append("Biz.List();");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.Append(sbTryCatch.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("return Ok(new {  ");
+                        sb.Append("list");
+                        sb.Append(sTable.ToLower());
+                        sb.Append(" = ");
+                        sb.Append("l");
+                        sb.Append(sTable);
+                        sb.Append(" }); //OK 200);");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine();
+                    }
+
+                    if (Find)
+                    {
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Busca un ");
+                        sb.Append(sTable);
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <param name=");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append("FindModel");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(">");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ");
+                        sb.Append("Esta entidad permite filtrar de manera sensilla por todos los campos que contiene");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ");
+                        sb.Append("Los valores que son filtrables son de tipo string. ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ESTE METODO NO SE PUEDE PROBAR CON SWAGGER, intente probarlo con Postman u otro programa");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </param>");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// devuelve una lista dinamica de los valores obtenidos en la base de datos, puede alterar los valores sin problemas");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Esta lista dinamica, es convertible tranquilamente a un Model");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[HttpGet(");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Find");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(")]");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[AllowAnonymous]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ActionResult Find (");
+                        sb.Append("[FromBody] ");
+                        sb.Append(sTable);
+                        sb.Append("FindModel");
+                        sb.Append(SPACE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append("FindModel");
+                        sb.Append(")");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(sbDeclaracionBiz.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("List<dynamic> ldynamic;");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("try");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("ldynamic");
+                        sb.Append(" = ");
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append("Biz.Find(");
+                        sb.Append(sTable);
+                        sb.Append(".ToDictionary<");
+                        sb.Append(sTable);
+                        sb.Append("FindModel");
+                        sb.Append(">");
+                        sb.Append("(");
+                        sb.Append(sTable.ToLower());
+                        sb.Append("FindModel");
+                        sb.Append("));");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.Append(sbTryCatch.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("return Ok(new {  list");
+                        sb.Append(sTable.ToLower());
+                        sb.Append(" = ldynamic");
+                        sb.Append("}); //OK 200);");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine();
+                    }
+
+                    if (Get)
+                    {
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Devuelve un ");
+                        sb.Append(sTable);
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <param name=");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Id");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(">");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ");
+                        sb.Append("El Id es la clave unica PK de la entidad ");
+                        sb.Append(sTable);
+                        sb.Append(".");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </param>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// devuelve un objeto unico del tipo ");
+                        sb.Append(sTable);
+                        sb.Append(" .");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[HttpGet(");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Get");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(")]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[AllowAnonymous]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ActionResult");
+                        sb.Append(" Get(int Id) ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(sbDeclaracionBiz.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(sTable);
+                        sb.Append(" o");
+                        sb.Append(sTable);
+                        sb.Append(" = new ");
+                        sb.Append(sTable);
+                        sb.Append("();");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("try");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append(" = ");
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append("Biz.Get(Id);");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.Append(sbTryCatch.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("return Ok(new {  ");
+                        sb.Append(sTable.ToLower());
+                        sb.Append(" = o");
+                        sb.Append(sTable);
+                        sb.Append("}); //OK 200);");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine();
+                    }
+
+                    if (Update)
+                    {
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Actualiza ");
+                        sb.Append(sTable);
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <param name=");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(">");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ");
+                        sb.Append("Esta entidad permite actualizar todos los valores de la tabla ");
+                        sb.Append(sTable);
+                        sb.Append(".");
+
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </param>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// devuelve Status: 200 en caso de haber actualizado correctamente ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[HttpPut(");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Update");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(")]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[AllowAnonymous]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ActionResult Update(");
+                        sb.Append("[FromBody] ");
+                        sb.Append(sTable);
+                        sb.Append(SPACE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append(")");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(sbDeclaracionBiz.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("try");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append("Biz.Update(");
+                        sb.Append(sTable.ToLower());
+                        sb.Append("); ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.Append(sbTryCatch.ToString());
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("return Ok(); //OK 200");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine();
+                    }
+
+                    if (Insert)
+                    {
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Inserta ");
+                        sb.Append(sTable);
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <param name=");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append("Model");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(">");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ");
+                        sb.Append("Inserta todos los campos de la entidad ");
+                        sb.Append(sTable);
+                        sb.Append(".");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </param>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// devuelve un status: 201/204 si inserto correctamente ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[HttpPost(");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Insert");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(")]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[AllowAnonymous]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ActionResult Insert(");
+                        sb.Append("[FromBody] ");
+                        sb.Append(sTable);
+                        sb.Append("Model");
+                        sb.Append(SPACE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append("Model");
+                        sb.Append(")");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(sbDeclaracionBiz.ToString());
+                        
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(sTable);
+                        sb.Append(SPACE);
+                        sb.Append(sTable.ToLower());
+                        sb.Append(" = new ");
+                        sb.Append(sTable);
+                        sb.Append("();");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("try");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+
+                        sb.Append(sTable.ToLower());
+                        sb.Append(" = ");
+                        sb.Append(sTable);
+                        sb.Append(".Merge<");
+                        sb.Append(sTable);
+                        sb.Append("Model, ");
+                        sb.Append(sTable);
+                        sb.Append(">(");
+                        sb.Append(sTable.ToLower());
+                        sb.Append("Model);");
+
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append("Biz.Insert(");
+                        sb.Append(sTable.ToLower());
+                        sb.Append(");");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.Append(sbTryCatch.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("return Created(); //OK 201/204");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine();
+                    }
+
+                    if (Delete)
+                    {
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// Elimina un registro de  ");
+                        sb.Append(sTable);
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </summary>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <param name=");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Id");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(">");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// ");
+                        sb.Append("El Id es la clave unica PK de la entidad ");
+                        sb.Append(sTable);
+                        sb.Append(".");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </param>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// <returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// devuelve Status: 200 en caso de haber eliminado correctamente ");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("/// </returns>");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[HttpDelete(");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append("Delete");
+                        sb.Append(COMILLADOBLE);
+                        sb.Append(")]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("[AllowAnonymous]");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("public ActionResult Delete(int Id)");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(sbDeclaracionBiz.ToString());
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("try");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("{");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("o");
+                        sb.Append(sTable);
+                        sb.Append("Biz.Delete(Id);");
+                        sb.AppendLine();
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.Append(sbTryCatch.ToString());
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("return Ok(); //OK 200");
+                        sb.AppendLine();
+
+                        sb.Append(TAB);
+                        sb.Append(TAB);
+                        sb.Append("}");
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine();
+                    }
+
+                    sb.Append(TAB);
+                    sb.Append("}");
                     sb.AppendLine();
+
+                    if (NameSpace.Length > 3)
+                    {
+                        sb.AppendLine();
+                        sb.Append("}");
+                    }
+
+                    sbFile.Append(sbNewPath.ToString());
+                    sbFile.Append(sTable);
+                    sbFile.Append("Controller");
+                    sbFile.Append(".cs");
+                    File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
                 }
-
-                if (Get)
-                {
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Devuelve un ");
-                    sb.Append(sTable);
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <param name=");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Id");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(">");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("El Id es la clave unica PK de la entidad ");
-                    sb.Append(sTable);
-                    sb.Append(".");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </param>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// devuelve un objeto unico del tipo ");
-                    sb.Append(sTable);
-                    sb.Append(" .");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpGet(");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Get");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(")]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[AllowAnonymous]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("public ActionResult");
-                    sb.Append(" Get(int Id) ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(sbDeclaracionBiz.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(sTable);
-                    sb.Append(" o");
-                    sb.Append(sTable);
-                    sb.Append(" = new ");
-                    sb.Append(sTable);
-                    sb.Append("();");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("try");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append(" = ");
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append("Biz.Get(Id);");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.Append(sbTryCatch.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("return Ok(new {  ");
-                    sb.Append(sTable.ToLower());
-                    sb.Append(" = o");
-                    sb.Append(sTable);
-                    sb.Append("}); //OK 200);");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.AppendLine();
-                    sb.AppendLine();
-                }
-
-                if (Update)
-                {
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Actualiza ");
-                    sb.Append(sTable);
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <param name=");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(">");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("Esta entidad permite actualizar todos los valores de la tabla ");
-                    sb.Append(sTable);
-                    sb.Append(".");
-
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </param>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// devuelve Status: 200 en caso de haber actualizado correctamente ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpPut(");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Update");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(")]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[AllowAnonymous]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("public ActionResult Update(");
-                    sb.Append("[FromBody] ");
-                    sb.Append(sTable);
-                    sb.Append(SPACE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append(")");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(sbDeclaracionBiz.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("try");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append("Biz.Update(");
-                    sb.Append(sTable.ToLower());
-                    sb.Append("); ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.Append(sbTryCatch.ToString());
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("return Ok(); //OK 200");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.AppendLine();
-                    sb.AppendLine();
-                }
-
-                if (Insert)
-                {
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Inserta ");
-                    sb.Append(sTable);
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <param name=");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append("Model");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(">");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("Inserta todos los campos de la entidad ");
-                    sb.Append(sTable);
-                    sb.Append(".");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </param>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// devuelve un status: 201/204 si inserto correctamente ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpPost(");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Insert");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(")]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[AllowAnonymous]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("public ActionResult Insert(");
-                    sb.Append("[FromBody] ");
-                    sb.Append(sTable);
-                    sb.Append(SPACE);
-                    sb.Append(sTable.ToLower());
-                    sb.Append(")");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(sbDeclaracionBiz.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("try");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append("Biz.Insert(");
-                    sb.Append(sTable.ToLower());
-                    sb.Append(");");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.Append(sbTryCatch.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("return Created(); //OK 201/204");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.AppendLine();
-                    sb.AppendLine();
-                }
-
-                if (Delete)
-                {
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// Elimina un registro de  ");
-                    sb.Append(sTable);
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </summary>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <param name=");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Id");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(">");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// ");
-                    sb.Append("El Id es la clave unica PK de la entidad ");
-                    sb.Append(sTable);
-                    sb.Append(".");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </param>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// <returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// devuelve Status: 200 en caso de haber eliminado correctamente ");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("/// </returns>");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[HttpDelete(");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append("Delete");
-                    sb.Append(COMILLADOBLE);
-                    sb.Append(")]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("[AllowAnonymous]");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("public ActionResult Delete(int Id)");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(sbDeclaracionBiz.ToString());
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("try");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("{");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("o");
-                    sb.Append(sTable);
-                    sb.Append("Biz.Delete(Id);");
-                    sb.AppendLine();
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.Append(sbTryCatch.ToString());
-                    
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("return Ok(); //OK 200");
-                    sb.AppendLine();
-
-                    sb.Append(TAB);
-                    sb.Append(TAB);
-                    sb.Append("}");
-                    sb.AppendLine();
-                    sb.AppendLine();
-                    sb.AppendLine();
-                }
-
-                sb.Append(TAB);
-                sb.Append("}");
-                sb.AppendLine();
-
-                if (NameSpace.Length > 3)
-                {
-                    sb.AppendLine();
-                    sb.Append("}");
-                }
-
-                sbFile.Append(sbNewPath.ToString());
-                sbFile.Append(sTable);
-                sbFile.Append("Controller");
-                sbFile.Append(".cs");
-                File.AppendAllText(sbFile.ToString(), sb.ToString(), Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+
+
+
+
 
     }
 }
