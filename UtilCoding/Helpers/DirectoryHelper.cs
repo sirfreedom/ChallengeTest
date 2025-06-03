@@ -166,14 +166,14 @@ namespace UtilCoding.Helpers
                             lLines = File.ReadAllLines(lFileFilter[i], Encoding.UTF8);
 
                             ExistResult = lLines.Select((linea, indice) => new { Linea = linea, Indice = indice })
-                            .Where(x => x.Linea.Contains(Searchtext.IncludeText))
+                            .Where(x => x.Linea.ToLower().Contains(Searchtext.IncludeText.ToLower()))
                             .Select(x => x.Indice)
                             .Count();
 
                             if (Searchtext.ExcludeText.Length > 0)
                             {
                                 NoExistResult = lLines.Select((linea, indice) => new { Linea = linea, Indice = indice })
-                                .Where(x => x.Linea.Contains(Searchtext.ExcludeText))
+                                .Where(x => x.Linea.ToLower().Contains(Searchtext.ExcludeText.ToLower()))
                                 .Select(x => x.Indice)
                                 .Count();
                             }
