@@ -21,23 +21,30 @@ namespace UtilCoding
         {
             DirectoryHelper.SearchText oSearchText = new DirectoryHelper.SearchText();
             Task<List<DirectoryHelper.ObjectFile>> oTask;
+            DirectoryHelper d;
             try
             {
                 oSearchText.Path = txtPath.Text;
                 oSearchText.FileName = txtNameFile_SearchInternalFile.Text;
-                oSearchText.Extension = ddlExtension.SelectedValue.ToString();
+                oSearchText.Extension = ddlExtension.Text.ToString();
                 oSearchText.IncludeText = txtInternalText.Text;
                 oSearchText.ExcludeText = txtNoIncludeText.Text;
 
                 gvCheck.DataSource = new List<DirectoryHelper.ObjectFile>();
 
+                d = DirectoryHelper.Instance;
+
+                lblWorking.Visible = true;
                 FreezeWhileRun(false);
-                oTask = DirectoryHelper.Instance.FindTextWithoutAnotherText(oSearchText);
+                oTask = d.FindTextWithoutAnotherText(oSearchText);
+                lblFileFound.Text = d.FileFound.ToString();
+
                 gvCheck.DataSource = BaseEntity.ToDataTable<ObjectFile>(oTask.Result);
                 gvCheck.PrepararGrilla();
                 FreezeWhileRun(oTask.IsCompleted);
+                lblWorking.Visible = !oTask.IsCompleted;
             }
-            catch (DirectoryHelper.DirectoryHelperException ex)
+            catch (DirectoryHelperException ex)
             {
                 throw ex;
             }
@@ -55,7 +62,6 @@ namespace UtilCoding
             {
                 oSearchFile.Path = txtPath.Text;
                 oSearchFile.FileName = txtFilename.Text;
-
                 gvCheck.DataSource = new List<DirectoryHelper.ObjectFile>();
 
                 FreezeWhileRun(false);

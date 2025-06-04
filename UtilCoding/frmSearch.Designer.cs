@@ -55,6 +55,10 @@ namespace UtilCoding
             this.btnExport = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.lblWorking = new System.Windows.Forms.Label();
+            this.btnCopy = new System.Windows.Forms.Button();
+            this.folderBrowserCopy = new System.Windows.Forms.FolderBrowserDialog();
+            this.lblFileFound = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.gvCheck = new cDataGridView();
             this.LinkArchivo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TamanoArchivo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,8 +66,6 @@ namespace UtilCoding
             this.NombreArchivo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FechaArchivo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AtributosArchivo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnCopy = new System.Windows.Forms.Button();
-            this.folderBrowserCopy = new System.Windows.Forms.FolderBrowserDialog();
             this.gSearchText.SuspendLayout();
             this.gSearchFile.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvCheck)).BeginInit();
@@ -127,7 +129,7 @@ namespace UtilCoding
             this.label2.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(25, 82);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 16);
+            this.label2.Size = new System.Drawing.Size(89, 16);
             this.label2.TabIndex = 7;
             this.label2.Text = "Include Text";
             // 
@@ -165,7 +167,7 @@ namespace UtilCoding
             this.label4.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(6, 111);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(112, 16);
+            this.label4.Size = new System.Drawing.Size(111, 16);
             this.label4.TabIndex = 11;
             this.label4.Text = "No Include Text";
             // 
@@ -277,12 +279,41 @@ namespace UtilCoding
             this.lblWorking.AutoSize = true;
             this.lblWorking.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWorking.ForeColor = System.Drawing.Color.Red;
-            this.lblWorking.Location = new System.Drawing.Point(12, 422);
+            this.lblWorking.Location = new System.Drawing.Point(738, 10);
             this.lblWorking.Name = "lblWorking";
             this.lblWorking.Size = new System.Drawing.Size(105, 24);
             this.lblWorking.TabIndex = 12;
             this.lblWorking.Text = "Working...";
             this.lblWorking.Visible = false;
+            // 
+            // btnCopy
+            // 
+            this.btnCopy.Enabled = false;
+            this.btnCopy.Location = new System.Drawing.Point(558, 418);
+            this.btnCopy.Name = "btnCopy";
+            this.btnCopy.Size = new System.Drawing.Size(162, 37);
+            this.btnCopy.TabIndex = 13;
+            this.btnCopy.Text = "Copy Files to...";
+            this.btnCopy.UseVisualStyleBackColor = true;
+            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            // 
+            // lblFileFound
+            // 
+            this.lblFileFound.AutoSize = true;
+            this.lblFileFound.Location = new System.Drawing.Point(322, 443);
+            this.lblFileFound.Name = "lblFileFound";
+            this.lblFileFound.Size = new System.Drawing.Size(13, 13);
+            this.lblFileFound.TabIndex = 27;
+            this.lblFileFound.Text = "0";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(266, 442);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 13);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "File Found";
             // 
             // gvCheck
             // 
@@ -314,7 +345,7 @@ namespace UtilCoding
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.MidnightBlue;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.gvCheck.DefaultCellStyle = dataGridViewCellStyle2;
-            this.gvCheck.Location = new System.Drawing.Point(12, 234);
+            this.gvCheck.Location = new System.Drawing.Point(10, 212);
             this.gvCheck.MultiSelect = true;
             this.gvCheck.Name = "gvCheck";
             this.gvCheck.ReadOnly = true;
@@ -411,22 +442,13 @@ namespace UtilCoding
             this.AtributosArchivo.ToolTipText = "AtributosArchivo";
             this.AtributosArchivo.Visible = false;
             // 
-            // btnCopy
-            // 
-            this.btnCopy.Enabled = false;
-            this.btnCopy.Location = new System.Drawing.Point(558, 418);
-            this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(162, 37);
-            this.btnCopy.TabIndex = 13;
-            this.btnCopy.Text = "Copy Files to...";
-            this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
             // frmSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1065, 467);
+            this.Controls.Add(this.lblFileFound);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.lblWorking);
             this.Controls.Add(this.btnExport);
@@ -484,5 +506,7 @@ namespace UtilCoding
         private System.Windows.Forms.DataGridViewTextBoxColumn AtributosArchivo;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserCopy;
+        private System.Windows.Forms.Label lblFileFound;
+        private System.Windows.Forms.Label label12;
     }
 }

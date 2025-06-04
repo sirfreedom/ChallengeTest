@@ -12,11 +12,44 @@ namespace UtilCoding.Helpers
     {
         private static DirectoryHelper _instance = null;
         private static object syncRoot = new Object();
-        private List<string> lNonDirectory = new List<string>() { "bin", "obj", "packages", ".", "node_modules", "$", "system", "tmp", "temp", "libraries", "build" };
-        private List<string> lNonFiles = new List<string>() { "AssemblyInfo.cs", "Global.asax", "package-lock.json", "package.json", "Web.csproj", "Web.Debug", "Web.Release", "packages.config", "Web.config", "FolderProfile.pubxml", "README.md", ".gitignore" };
+        private List<string> lNonDirectory = new List<string>() { "bin", "obj", "packages", "node_modules", "$", "system", "tmp", "temp", "libraries", "build", "Properties", "Github" , "PublishProfiles",".git" };
+        private List<string> lNonFiles = new List<string>() { "AssemblyInfo.cs", "Global.asax", "package-lock.json", "package.json", "Web.csproj", "Web.Debug", "Web.Release", "packages.config", "Web.config", "FolderProfile.pubxml", "README.md", ".gitignore", ".vsidx" };
+        private int _FilesFound = 0;
+
+
+
+
+
+
+        //private bool _myVariable = false;
+        //public delegate void VariableChangedEventHandler(object sender, EventArgs e);
+        //public event VariableChangedEventHandler VariableChanged;
+        //public bool MyVariable
+        //{
+        //    get { return _myVariable; }
+        //    set
+        //    {
+        //        if (_myVariable != value)
+        //        {
+        //            _myVariable = value;
+        //            OnVariableChanged(EventArgs.Empty);
+        //        }
+        //    }
+        //}
+        //protected virtual void OnVariableChanged(EventArgs e)
+        //{
+        //    VariableChanged?.Invoke(this, e);
+        //}
 
         private DirectoryHelper()
         { }
+
+        public int FileFound { 
+            get 
+            { 
+                return _FilesFound;
+            } 
+        }
 
         public static DirectoryHelper Instance
         {
@@ -35,7 +68,6 @@ namespace UtilCoding.Helpers
                 return _instance;
             }
         }
-
 
         public Task<List<ObjectFile>> FindFiles(SearchFile search)
         {
@@ -107,7 +139,6 @@ namespace UtilCoding.Helpers
             return Task.FromResult(lObjectFile);
         }
 
-
         public Task<List<ObjectFile>> FindTextWithoutAnotherText(SearchText Searchtext)
         {
             List<ObjectFile> lObjectFile = new List<ObjectFile>();
@@ -123,6 +154,7 @@ namespace UtilCoding.Helpers
             int NoExistResult = 0;
             StringBuilder sbFindFile = new StringBuilder();
             StringBuilder sb = new StringBuilder();
+            List<string> lFileFinded = new List<string>();
             try
             {
                 try
@@ -155,6 +187,7 @@ namespace UtilCoding.Helpers
                         lFiles = Directory.GetFiles(sDirectory, sbFindFile.ToString());
                         lFileFilter = lFiles.ToList();
                         lFileFilter.RemoveAll(x => lNonFiles.Any(NonFile => x.ToLower().Contains(NonFile.ToLower())));
+                        lFileFilter.RemoveAll(x => lFileFinded.Any(FileFinded => x.ToLower().Contains(FileFinded.ToLower())));
 
                         if (Searchtext.FileName != string.Empty && (lFileFilter.Count == 0 || lFileFilter.Count > 1))
                         {
@@ -163,7 +196,15 @@ namespace UtilCoding.Helpers
 
                         for (int i = 0; i < lFileFilter.Count; i++)
                         {
-                            lLines = File.ReadAllLines(lFileFilter[i], Encoding.UTF8);
+
+                            try
+                            {
+                                lLines = File.ReadAllLines(lFileFilter[i], Encoding.UTF8);
+                            }
+                            catch //no importa el error que pase, salimos, probablemente sea de permisos
+                            {
+                                continue;
+                            }
 
                             ExistResult = lLines.Select((linea, indice) => new { Linea = linea, Indice = indice })
                             .Where(x => x.Linea.ToLower().Contains(Searchtext.IncludeText.ToLower()))
@@ -179,7 +220,8 @@ namespace UtilCoding.Helpers
                             }
 
                             if (
-                                (ExistResult > 0 && NoExistResult == 0 && Searchtext.ExcludeText.Length == 0) ||
+                                (ExistResult > 0 && NoExistResult == 0 && Searchtext.ExcludeText.Length == 0)
+                                ||
                                 (ExistResult > 0 && NoExistResult == 0 && Searchtext.ExcludeText.Length > 0)
                                )
                             {
@@ -193,9 +235,11 @@ namespace UtilCoding.Helpers
                                 oObjectFile.TamanoArchivo = f.Length.ToString();
                                 lObjectFile.Add(oObjectFile);
                                 ExistResult = 0;
+                                lFileFinded.Add(f.Name);
                             }
-                        }
 
+                            _FilesFound = lObjectFile.Count;
+                        }
                     }
                 }
             }
@@ -210,19 +254,18 @@ namespace UtilCoding.Helpers
             return Task.FromResult(lObjectFile);
         }
 
-
         public DataTable ListToDatatable(List<string> lValue) 
         {
             DataTable dt = new DataTable();
             DataColumn dcId = new DataColumn("Id", typeof(string));
             DataColumn dcNombre = new DataColumn("Descripcion", typeof(string));
-            DataRow dr;
             try
             {
                 dt.Columns.Add(dcId);
                 dt.Columns.Add(dcNombre);
                 foreach (string s in lValue) 
                 {
+                    DataRow dr;
                     dr = dt.NewRow();
                     dr["Id"] = s;
                     dr["Descripcion"] = s;
